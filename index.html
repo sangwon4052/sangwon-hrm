@@ -1278,7 +1278,7 @@
                 onLoginSuccess(JSON.parse(cu));
             }
 
-            // 폴링 시작 (5초마다 다른 기기 변경사항 반영)
+            // 폴링 시작 (3초마다 다른 기기 변경사항 반영)
             startPolling();
         });
     </script>
@@ -1286,6 +1286,7 @@
     <script>
         // ── 인증 시스템 ──────────────────────────────────────────
         function getUsers(){ return window._sysUsers || []; }
+        window.getUsers = getUsers;
         async function saveUser(user){
             await window.fbSet('sysUsers', user.id, user);
             // Firebase 리스너 대기 없이 즉시 메모리 반영
@@ -1378,6 +1379,7 @@
         }
 
         async function loadAdminPanel(){
+            window.loadAdminPanel = loadAdminPanel;
             // Firebase에서 최신 사용자 목록 강제 로드
             const fresh = await fsGetAll('sysUsers');
             if(fresh && fresh.length > 0) window._sysUsers = fresh;
@@ -2006,6 +2008,18 @@
                     <td><span class="badge ${statusClass}">${status}</span></td></tr>`;
             }).join('');
         }
+
+        // ── 모든 함수 전역 등록 (스크립트 간 접근 보장) ──────────
+        window.loadAdminPanel  = loadAdminPanel;
+        window.updateDashboard = updateDashboard;
+        window.loadEmployees   = loadEmployees;
+        window.loadAnnualLeave = loadAnnualLeave;
+        window.loadEducation   = loadEducation;
+        window.updateBackupInfo= updateBackupInfo;
+        window.onLoginSuccess  = onLoginSuccess;
+        window.showTab         = showTab;
+        window.getCurrentUser  = getCurrentUser;
+        window.getUsers        = getUsers;
     </script>
 </body>
 </html>
