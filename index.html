@@ -1144,16 +1144,17 @@
 
         // 컬렉션 전체 읽기
         async function fsGetAll(col) {
-            const res  = await fetch(`${FB_BASE}/${col}?key=${FB_API_KEY}`);
+            const res  = await fetch(`${FB_BASE}/${col}?key=${FB_API_KEY}&pageSize=300`);
             const json = await res.json();
             if (!json.documents) return [];
             return json.documents.map(d => fromFsFields(d.fields || {}));
         }
 
-        // 문서 저장 (upsert)
+        // 문서 저장 (upsert) - 공백 등 특수문자 인코딩
         async function fsSet(col, id, data) {
             const fields = toFsFields(JSON.parse(JSON.stringify(data)));
-            await fetch(`${FB_BASE}/${col}/${id}?key=${FB_API_KEY}`, {
+            const encodedId = encodeURIComponent(String(id));
+            await fetch(`${FB_BASE}/${col}/${encodedId}?key=${FB_API_KEY}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fields })
@@ -1162,7 +1163,8 @@
 
         // 문서 삭제
         async function fsDelete(col, id) {
-            await fetch(`${FB_BASE}/${col}/${id}?key=${FB_API_KEY}`, { method: 'DELETE' });
+            const encodedId = encodeURIComponent(String(id));
+            await fetch(`${FB_BASE}/${col}/${encodedId}?key=${FB_API_KEY}`, { method: 'DELETE' });
         }
 
         // 컬렉션 전체 교체
@@ -1352,10 +1354,15 @@
             showTab('annual-leave', document.getElementById('annualLeaveTab'));
         }
 
-        function loadAdminPanel(){
+        async function loadAdminPanel(){
+            // Firebase에서 최신 사용자 목록 강제 로드
+            const fresh = await fsGetAll('sysUsers');
+            if(fresh && fresh.length > 0) window._sysUsers = fresh;
+
             const users   = getUsers();
             const pending = users.filter(u=>u.status==='pending');
             const pendingEl = document.getElementById('pendingUsersList');
+            if(!pendingEl) return;
             pendingEl.innerHTML = pending.length===0
                 ? '<p style="color:#856404;font-style:italic;">대기 중인 회원이 없습니다.</p>'
                 : pending.map(u=>`
