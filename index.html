@@ -1201,12 +1201,14 @@
                     window._sysUsers = d;
                     if(window._appReady){
                         const cu = sessionStorage.getItem('currentUser');
-                        if(cu && JSON.parse(cu).role === 'admin') loadAdminPanel();
+                        if(cu && JSON.parse(cu).role === 'admin'){
+                            loadAdminPanel(); // 탭 관계없이 항상 갱신
+                        }
                     }
                 });
             };
-            poll(); // 즉시 1회 실행
-            setInterval(poll, 5000); // 5초마다 갱신
+            poll();
+            setInterval(poll, 3000); // 3초마다 갱신 (더 빠르게)
         }
 
         // ── 초기화 ───────────────────────────────────────────────
@@ -1287,6 +1289,11 @@
             const pw = document.getElementById('loginPw').value;
             const errEl = document.getElementById('loginError');
             if(!id||!pw){ errEl.textContent='아이디와 비밀번호를 입력하세요.'; errEl.classList.add('visible'); return; }
+
+            // sysUsers가 비어있으면 Firebase에서 다시 로드
+            if(!window._sysUsers || window._sysUsers.length === 0){
+                await pollCollection('sysUsers', d => window._sysUsers = d);
+            }
 
             const users = getUsers();
             const user  = users.find(u=>u.id===id && u.pw===pw);
