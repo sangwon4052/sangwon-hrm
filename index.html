@@ -6,87 +6,99 @@
 <title>직원관리 시스템</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-:root {
-  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#eff6ff;
-  --success:#16a34a;--success-light:#f0fdf4;
-  --danger:#dc2626;--danger-light:#fef2f2;
-  --warning:#d97706;--warning-light:#fffbeb;
-  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
+:root{
+  --p:#2563eb;--pd:#1d4ed8;--pl:#eff6ff;
+  --s:#16a34a;--sl:#f0fdf4;
+  --d:#dc2626;--dl:#fef2f2;
+  --w:#d97706;--wl:#fffbeb;
+  --g0:#ffffff;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
   --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;
-  --shadow:0 1px 3px rgba(0,0,0,.1);--shadow-md:0 4px 6px rgba(0,0,0,.07);
-  --shadow-lg:0 10px 15px rgba(0,0,0,.1);--r:8px;--r-lg:12px;
+  --sh:0 1px 3px rgba(0,0,0,.1);--shm:0 4px 6px rgba(0,0,0,.07);--shl:0 10px 15px rgba(0,0,0,.1);
+  --r:8px;--rl:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--g50);color:var(--g800);font-size:14px}
 
-/* 인증 */
-#authOverlay{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#1e3a8a,#2563eb);z-index:9999;align-items:center;justify-content:center}
-#authOverlay.on{display:flex}
-.auth-box{background:white;border-radius:var(--r-lg);padding:40px;width:400px;box-shadow:var(--shadow-lg)}
-.auth-logo{text-align:center;margin-bottom:28px}
-.auth-logo h1{font-size:22px;font-weight:700;color:var(--g800);margin-top:8px}
-.auth-logo p{font-size:13px;color:var(--g400);margin-top:4px}
-.auth-tabs{display:flex;border-bottom:2px solid var(--g200);margin-bottom:24px}
-.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:500;color:var(--g400);cursor:pointer;border:none;background:none;transition:.2s;font-family:inherit}
-.auth-tab.on{color:var(--primary);border-bottom:2px solid var(--primary);margin-bottom:-2px}
-.auth-form{display:none}.auth-form.on{display:block}
-.ff{margin-bottom:16px}
-.ff label{display:block;font-size:13px;font-weight:500;color:var(--g600);margin-bottom:6px}
-.ff input{width:100%;padding:10px 12px;border:1px solid var(--g300);border-radius:var(--r);font-size:14px;font-family:inherit;outline:none;transition:.2s}
-.ff input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.btn-full{width:100%;padding:11px;background:var(--primary);color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px;transition:.2s}
-.btn-full:hover{background:var(--primary-dark)}
-.amsg{font-size:13px;margin-top:12px;padding:10px 12px;border-radius:var(--r);display:none}
-.amsg.err{display:block;background:var(--danger-light);color:var(--danger)}
-.amsg.ok{display:block;background:var(--success-light);color:var(--success)}
+/* ── 인증 ── */
+#auth{display:none;position:fixed;inset:0;background:linear-gradient(135deg,#1e3a8a,#2563eb);z-index:9999;align-items:center;justify-content:center}
+#auth.on{display:flex}
+.ab{background:var(--g0);border-radius:var(--rl);padding:40px;width:400px;box-shadow:var(--shl)}
+.al{text-align:center;margin-bottom:28px}
+.al h1{font-size:22px;font-weight:700;margin-top:8px}
+.al p{font-size:13px;color:var(--g400);margin-top:4px}
+.atabs{display:flex;border-bottom:2px solid var(--g200);margin-bottom:24px}
+.atab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:500;color:var(--g400);cursor:pointer;border:none;background:none;font-family:inherit;transition:.2s}
+.atab.on{color:var(--p);border-bottom:2px solid var(--p);margin-bottom:-2px}
+.af{display:none}.af.on{display:block}
+.fl{margin-bottom:16px}
+.fl label{display:block;font-size:13px;font-weight:500;color:var(--g600);margin-bottom:6px}
+.fl input{width:100%;padding:10px 12px;border:1px solid var(--g300);border-radius:var(--r);font-size:14px;font-family:inherit;outline:none;transition:.2s}
+.fl input:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.bfull{width:100%;padding:11px;background:var(--p);color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;margin-top:4px;transition:.2s}
+.bfull:hover{background:var(--pd)}
+.bfull:disabled{background:var(--g300);cursor:not-allowed}
+.msg{font-size:13px;margin-top:12px;padding:10px 12px;border-radius:var(--r);display:none}
+.msg.err{display:block;background:var(--dl);color:var(--d)}
+.msg.ok{display:block;background:var(--sl);color:var(--s)}
 
-/* 헤더 */
-#hdr{background:white;border-bottom:1px solid var(--g200);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.05)}
-.hdr-logo{font-size:18px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:8px}
-.hdr-right{display:flex;align-items:center;gap:12px}
-.uname{font-size:14px;font-weight:500;color:var(--g700)}
-.ubadge{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
-.ubadge.admin{background:#fef3c7;color:#92400e}
-.ubadge.user{background:var(--primary-light);color:var(--primary-dark)}
-.hbtn{padding:7px 14px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:.15s;border:1px solid var(--g300);background:white;color:var(--g600)}
+/* ── 로딩 스피너 ── */
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--g200);border-top-color:var(--p);border-radius:50%;animation:sp .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading-full{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--g400);font-size:14px}
+
+/* ── 헤더 ── */
+#hdr{background:var(--g0);border-bottom:1px solid var(--g200);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.logo{font-size:18px;font-weight:700;color:var(--p);display:flex;align-items:center;gap:8px}
+.hright{display:flex;align-items:center;gap:12px}
+.un{font-size:14px;font-weight:500;color:var(--g700)}
+.ub{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
+.ub.admin{background:#fef3c7;color:#92400e}
+.ub.user{background:var(--pl);color:var(--pd)}
+.hbtn{padding:7px 14px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;border:1px solid var(--g300);background:var(--g0);color:var(--g600);transition:.15s}
 .hbtn:hover{background:var(--g50)}
 
-/* 네비 */
-#nav{background:white;border-bottom:1px solid var(--g200);padding:0 24px;display:flex;gap:4px}
-.nbtn{padding:14px 16px;font-size:13px;font-weight:500;color:var(--g500);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;font-family:inherit;display:flex;align-items:center;gap:4px}
-.nbtn:hover{color:var(--primary)}
-.nbtn.on{color:var(--primary);border-bottom-color:var(--primary)}
-.nbadge{display:inline-flex;align-items:center;justify-content:center;background:var(--danger);color:white;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:99px;padding:0 4px}
+/* ── 새로고침 버튼 ── */
+.refresh-bar{background:var(--pl);border-bottom:1px solid var(--g200);padding:6px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--pd)}
+.rbtn{padding:4px 12px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;border:1px solid var(--p);background:var(--p);color:white;transition:.15s}
+.rbtn:hover{background:var(--pd)}
 
-/* 메인 */
+/* ── 네비 ── */
+#nav{background:var(--g0);border-bottom:1px solid var(--g200);padding:0 24px;display:flex;gap:4px}
+.nb{padding:14px 16px;font-size:13px;font-weight:500;color:var(--g500);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;font-family:inherit;display:flex;align-items:center;gap:4px}
+.nb:hover{color:var(--p)}
+.nb.on{color:var(--p);border-bottom-color:var(--p)}
+.nbadge{display:inline-flex;align-items:center;justify-content:center;background:var(--d);color:white;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:99px;padding:0 4px}
+
+/* ── 메인 ── */
 #main{padding:24px;max-width:1200px;margin:0 auto}
-.page{display:none}.page.on{display:block}
+.pg{display:none}.pg.on{display:block}
 
-/* 공통 버튼 */
+/* ── 버튼 ── */
 .btn{padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;gap:6px}
-.btn-p{background:var(--primary);color:white}.btn-p:hover{background:var(--primary-dark)}
-.btn-s{background:var(--success);color:white}.btn-s:hover{background:#15803d}
-.btn-d{background:var(--danger);color:white}.btn-d:hover{background:#b91c1c}
-.btn-o{background:white;color:var(--g600);border:1px solid var(--g300)}.btn-o:hover{background:var(--g50)}
-.btn-sm{padding:5px 10px;font-size:12px}
+.bp{background:var(--p);color:white}.bp:hover{background:var(--pd)}
+.bs{background:var(--s);color:white}.bs:hover{background:#15803d}
+.bd{background:var(--d);color:white}.bd:hover{background:#b91c1c}
+.bo{background:var(--g0);color:var(--g600);border:1px solid var(--g300)}.bo:hover{background:var(--g50)}
+.bsm{padding:5px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* 카드 */
-.card{background:white;border-radius:var(--r-lg);border:1px solid var(--g200);padding:20px;box-shadow:var(--shadow)}
-.ctitle{font-size:15px;font-weight:600;color:var(--g800);margin-bottom:16px}
+/* ── 카드 ── */
+.card{background:var(--g0);border-radius:var(--rl);border:1px solid var(--g200);padding:20px;box-shadow:var(--sh)}
+.ct{font-size:15px;font-weight:600;color:var(--g800);margin-bottom:16px}
 
-/* 대시보드 */
-.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.dc{background:white;border-radius:var(--r-lg);border:1px solid var(--g200);padding:20px;box-shadow:var(--shadow);transition:.2s}
-.dc:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
-.dc .lbl{font-size:12px;color:var(--g400);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
-.dc .num{font-size:32px;font-weight:700;color:var(--g800);margin:8px 0 4px}
-.dc .sub{font-size:12px;color:var(--g400)}
-.dc.bl{border-top:3px solid var(--primary)}
-.dc.gr{border-top:3px solid var(--success)}
-.dc.or{border-top:3px solid var(--warning)}
-.dc.re{border-top:3px solid var(--danger)}
+/* ── 대시보드 ── */
+.dg{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.dc{background:var(--g0);border-radius:var(--rl);border:1px solid var(--g200);padding:20px;box-shadow:var(--sh);transition:.2s}
+.dc:hover{box-shadow:var(--shm);transform:translateY(-1px)}
+.dc .lb{font-size:12px;color:var(--g400);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.dc .nm{font-size:32px;font-weight:700;color:var(--g800);margin:8px 0 4px}
+.dc .sb{font-size:12px;color:var(--g400)}
+.dc.bl{border-top:3px solid var(--p)}
+.dc.gr{border-top:3px solid var(--s)}
+.dc.or{border-top:3px solid var(--w)}
+.dc.re{border-top:3px solid var(--d)}
 
-/* 테이블 */
+/* ── 테이블 ── */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{padding:10px 14px;text-align:left;font-size:12px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--g200);background:var(--g50)}
@@ -94,53 +106,53 @@ td{padding:12px 14px;border-bottom:1px solid var(--g100);font-size:13px;color:va
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--g50)}
 
-/* 뱃지 */
+/* ── 뱃지 ── */
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600}
-.b-bl{background:var(--primary-light);color:var(--primary-dark)}
-.b-gr{background:var(--success-light);color:var(--success)}
-.b-rd{background:var(--danger-light);color:var(--danger)}
-.b-yw{background:var(--warning-light);color:var(--warning)}
-.b-gy{background:var(--g100);color:var(--g600)}
+.bbl{background:var(--pl);color:var(--pd)}
+.bgr{background:var(--sl);color:var(--s)}
+.brd{background:var(--dl);color:var(--d)}
+.byw{background:var(--wl);color:var(--w)}
+.bgy{background:var(--g100);color:var(--g600)}
 
-/* 폼 */
+/* ── 폼 ── */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.fgi{display:flex;flex-direction:column;gap:6px}
-.fgi label{font-size:13px;font-weight:500;color:var(--g600)}
-.fgi input,.fgi select,.fgi textarea{padding:9px 12px;border:1px solid var(--g300);border-radius:var(--r);font-size:13px;font-family:inherit;color:var(--g800);outline:none;transition:.2s}
-.fgi input:focus,.fgi select:focus,.fgi textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.fgi.full{grid-column:1/-1}
+.fi{display:flex;flex-direction:column;gap:6px}
+.fi label{font-size:13px;font-weight:500;color:var(--g600)}
+.fi input,.fi select,.fi textarea{padding:9px 12px;border:1px solid var(--g300);border-radius:var(--r);font-size:13px;font-family:inherit;color:var(--g800);outline:none;transition:.2s}
+.fi input:focus,.fi select:focus,.fi textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fi.full{grid-column:1/-1}
 
-/* 모달 */
+/* ── 모달 ── */
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
 .mo.on{display:flex}
-.mb{background:white;border-radius:var(--r-lg);width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.mb{background:var(--g0);border-radius:var(--rl);width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shl)}
 .mh{padding:20px 24px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between}
 .mh h3{font-size:16px;font-weight:600}
 .mc{padding:24px}
 .mf{padding:16px 24px;border-top:1px solid var(--g200);display:flex;justify-content:flex-end;gap:8px}
-.mclose{background:none;border:none;cursor:pointer;color:var(--g400);font-size:22px;padding:0 4px;line-height:1}
-.mclose:hover{color:var(--g700)}
+.mx{background:none;border:none;cursor:pointer;color:var(--g400);font-size:22px;padding:0 4px;line-height:1}
+.mx:hover{color:var(--g700)}
 
-/* 툴바 */
+/* ── 툴바 ── */
 .tb{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
-.tb-l{display:flex;align-items:center;gap:8px}
+.tbl{display:flex;align-items:center;gap:8px}
 .si{padding:8px 12px;border:1px solid var(--g300);border-radius:var(--r);font-size:13px;font-family:inherit;width:220px;outline:none}
-.si:focus{border-color:var(--primary)}
+.si:focus{border-color:var(--p)}
 
-/* 빈 상태 */
+/* ── 빈 상태 ── */
 .empty{text-align:center;padding:48px 20px;color:var(--g400)}
 .empty .ico{font-size:36px;margin-bottom:10px}
 .empty p{font-size:13px}
 
-/* 연차 */
-.lb-wrap{background:var(--g100);border-radius:99px;height:8px;overflow:hidden;width:80px}
-.lb{height:100%;border-radius:99px;background:var(--primary)}
+/* ── 연차 바 ── */
+.lbw{background:var(--g100);border-radius:99px;height:8px;overflow:hidden;width:80px}
+.lbb{height:100%;border-radius:99px}
 
-/* 관리자 */
-.pi{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--g200);border-radius:var(--r);margin-bottom:8px;background:var(--warning-light)}
+/* ── 관리자 대기 ── */
+.pi{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--g200);border-radius:var(--r);margin-bottom:8px;background:var(--wl)}
 
 @media(max-width:768px){
-  .dash-grid{grid-template-columns:1fr 1fr}
+  .dg{grid-template-columns:1fr 1fr}
   .fg{grid-template-columns:1fr}
   #main{padding:16px}
 }
@@ -149,74 +161,80 @@ tr:hover td{background:var(--g50)}
 <body>
 
 <!-- 인증 -->
-<div id="authOverlay" class="on">
-  <div class="auth-box">
-    <div class="auth-logo">
+<div id="auth" class="on">
+  <div class="ab">
+    <div class="al">
       <div style="font-size:36px">🏢</div>
       <h1>직원관리 시스템</h1>
       <p>Employee Management System</p>
     </div>
-    <div class="auth-tabs">
-      <button class="auth-tab on" onclick="switchTab('login')">로그인</button>
-      <button class="auth-tab" onclick="switchTab('reg')">회원가입</button>
+    <div class="atabs">
+      <button class="atab on" onclick="switchTab('login')">로그인</button>
+      <button class="atab" onclick="switchTab('reg')">회원가입</button>
     </div>
-    <div id="fLogin" class="auth-form on">
-      <div class="ff"><label>아이디</label><input id="lId" placeholder="아이디" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <div class="ff"><label>비밀번호</label><input id="lPw" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <div id="lMsg" class="amsg"></div>
-      <button class="btn-full" onclick="doLogin()">로그인</button>
+    <div id="fLogin" class="af on">
+      <div class="fl"><label>아이디</label><input id="lId" placeholder="아이디" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="fl"><label>비밀번호</label><input id="lPw" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div id="lMsg" class="msg"></div>
+      <button class="bfull" id="lBtn" onclick="doLogin()">로그인</button>
     </div>
-    <div id="fReg" class="auth-form">
-      <div class="ff"><label>이름</label><input id="rName" placeholder="이름"></div>
-      <div class="ff"><label>아이디 (4자 이상)</label><input id="rId" placeholder="아이디"></div>
-      <div class="ff"><label>비밀번호 (6자 이상)</label><input id="rPw" type="password" placeholder="비밀번호"></div>
-      <div class="ff"><label>비밀번호 확인</label><input id="rPw2" type="password" placeholder="비밀번호 재입력"></div>
-      <div id="rMsg" class="amsg"></div>
-      <button class="btn-full" onclick="doRegister()">회원가입 신청</button>
+    <div id="fReg" class="af">
+      <div class="fl"><label>이름</label><input id="rName" placeholder="이름"></div>
+      <div class="fl"><label>아이디 (4자 이상)</label><input id="rId" placeholder="아이디"></div>
+      <div class="fl"><label>비밀번호 (6자 이상)</label><input id="rPw" type="password" placeholder="비밀번호"></div>
+      <div class="fl"><label>비밀번호 확인</label><input id="rPw2" type="password" placeholder="비밀번호 재입력"></div>
+      <div id="rMsg" class="msg"></div>
+      <button class="bfull" id="rBtn" onclick="doRegister()">회원가입 신청</button>
     </div>
   </div>
 </div>
 
 <!-- 헤더 -->
 <header id="hdr" style="display:none">
-  <div class="hdr-logo">🏢 직원관리 시스템</div>
-  <div class="hdr-right">
-    <span class="uname" id="hName"></span>
-    <span class="ubadge" id="hBadge"></span>
+  <div class="logo">🏢 직원관리 시스템</div>
+  <div class="hright">
+    <span class="un" id="hName"></span>
+    <span class="ub" id="hBadge"></span>
     <button class="hbtn" onclick="doLogout()">로그아웃</button>
   </div>
 </header>
 
+<!-- 새로고침 안내바 -->
+<div class="refresh-bar" id="refreshBar" style="display:none">
+  📡 데이터는 로그인 시 1회 로드됩니다. 다른 기기의 변경사항을 보려면 새로고침하세요.
+  <button class="rbtn" onclick="reloadData()">🔄 데이터 새로고침</button>
+</div>
+
 <!-- 네비 -->
 <nav id="nav" style="display:none">
-  <button class="nbtn on" onclick="go('dash',this)">📊 대시보드</button>
-  <button class="nbtn" onclick="go('emp',this)">👥 직원관리</button>
-  <button class="nbtn" id="nLeave" onclick="go('leave',this)" style="display:none">📅 연차관리</button>
-  <button class="nbtn" onclick="go('edu',this)">📚 직무교육</button>
-  <button class="nbtn" onclick="go('backup',this)">💾 백업관리</button>
-  <button class="nbtn" id="nAdmin" onclick="go('admin',this)" style="display:none">🛡️ 관리자<span class="nbadge" id="pbadge" style="display:none">0</span></button>
+  <button class="nb on" onclick="go('dash',this)">📊 대시보드</button>
+  <button class="nb" onclick="go('emp',this)">👥 직원관리</button>
+  <button class="nb" id="nLeave" onclick="go('leave',this)" style="display:none">📅 연차관리</button>
+  <button class="nb" onclick="go('edu',this)">📚 직무교육</button>
+  <button class="nb" onclick="go('backup',this)">💾 백업관리</button>
+  <button class="nb" id="nAdmin" onclick="go('admin',this)" style="display:none">🛡️ 관리자<span class="nbadge" id="pbadge" style="display:none">0</span></button>
 </nav>
 
 <!-- 메인 -->
 <main id="main" style="display:none">
 
   <!-- 대시보드 -->
-  <div id="p-dash" class="page on">
-    <div class="dash-grid">
-      <div class="dc bl"><div class="lbl">전체 직원</div><div class="num" id="dTotal">0</div><div class="sub">명 등록됨</div></div>
-      <div class="dc gr"><div class="lbl">재직 직원</div><div class="num" id="dActive">0</div><div class="sub">명 재직중</div></div>
-      <div class="dc or"><div class="lbl">퇴사 직원</div><div class="num" id="dInactive">0</div><div class="sub">명 퇴사</div></div>
-      <div class="dc re"><div class="lbl">이번달 생일</div><div class="num" id="dBday">0</div><div class="sub">명</div></div>
+  <div id="p-dash" class="pg on">
+    <div class="dg">
+      <div class="dc bl"><div class="lb">전체 직원</div><div class="nm" id="dTotal">0</div><div class="sb">명 등록됨</div></div>
+      <div class="dc gr"><div class="lb">재직 직원</div><div class="nm" id="dActive">0</div><div class="sb">명 재직중</div></div>
+      <div class="dc or"><div class="lb">퇴사 직원</div><div class="nm" id="dInactive">0</div><div class="sb">명 퇴사</div></div>
+      <div class="dc re"><div class="lb">이번달 생일</div><div class="nm" id="dBday">0</div><div class="sb">명</div></div>
     </div>
-    <div class="card"><div class="ctitle">📋 최근 등록 직원</div><div id="dRecent"></div></div>
+    <div class="card"><div class="ct">📋 최근 등록 직원</div><div id="dRecent"></div></div>
   </div>
 
   <!-- 직원관리 -->
-  <div id="p-emp" class="page">
+  <div id="p-emp" class="pg">
     <div class="card">
       <div class="tb">
-        <div class="tb-l"><input class="si" id="empQ" placeholder="🔍 이름, 부서, 직책..." oninput="renderEmp()"></div>
-        <button class="btn btn-p" onclick="openEmpMo()">+ 직원 등록</button>
+        <div class="tbl"><input class="si" id="empQ" placeholder="🔍 이름, 부서, 직책..." oninput="renderEmp()"></div>
+        <button class="btn bp" onclick="openEmpMo()">+ 직원 등록</button>
       </div>
       <div class="tw"><table>
         <thead><tr><th>이름</th><th>부서</th><th>직책</th><th>입사일</th><th>전화번호</th><th>상태</th><th>관리</th></tr></thead>
@@ -226,16 +244,16 @@ tr:hover td{background:var(--g50)}
   </div>
 
   <!-- 연차관리 -->
-  <div id="p-leave" class="page">
+  <div id="p-leave" class="pg">
     <div class="card">
       <div class="tb">
-        <div class="tb-l">
+        <div class="tbl">
           <label style="font-size:13px;font-weight:500;color:var(--g600)">회계연도</label>
           <select id="leaveYr" style="padding:7px 10px;border:1px solid var(--g300);border-radius:var(--r);font-family:inherit;font-size:13px" onchange="renderLeave()"></select>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-o" onclick="openBulkMo()">일괄 연차 지급</button>
-          <button class="btn btn-p" onclick="openLeaveMo()">+ 연차 추가</button>
+          <button class="btn bo" onclick="openBulkMo()">일괄 연차 지급</button>
+          <button class="btn bp" onclick="openLeaveMo()">+ 연차 추가</button>
         </div>
       </div>
       <div class="tw"><table>
@@ -246,11 +264,11 @@ tr:hover td{background:var(--g50)}
   </div>
 
   <!-- 직무교육 -->
-  <div id="p-edu" class="page">
+  <div id="p-edu" class="pg">
     <div class="card">
       <div class="tb">
-        <div class="tb-l"><input class="si" id="eduQ" placeholder="🔍 직원명, 교육명..." oninput="renderEdu()"></div>
-        <button class="btn btn-p" onclick="openEduMo()">+ 교육 추가</button>
+        <div class="tbl"><input class="si" id="eduQ" placeholder="🔍 직원명, 교육명..." oninput="renderEdu()"></div>
+        <button class="btn bp" onclick="openEduMo()">+ 교육 추가</button>
       </div>
       <div class="tw"><table>
         <thead><tr><th>직원</th><th>교육명</th><th>교육일</th><th>수료증</th><th>다음교육일</th><th>상태</th><th>관리</th></tr></thead>
@@ -260,10 +278,10 @@ tr:hover td{background:var(--g50)}
   </div>
 
   <!-- 백업관리 -->
-  <div id="p-backup" class="page">
+  <div id="p-backup" class="pg">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="card">
-        <div class="ctitle">💾 데이터 현황</div>
+        <div class="ct">💾 데이터 현황</div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;justify-content:space-between;padding:10px;background:var(--g50);border-radius:var(--r)"><span style="color:var(--g600)">전체 직원</span><strong id="bkE">0명</strong></div>
           <div style="display:flex;justify-content:space-between;padding:10px;background:var(--g50);border-radius:var(--r)"><span style="color:var(--g600)">연차 데이터</span><strong id="bkL">0건</strong></div>
@@ -271,37 +289,37 @@ tr:hover td{background:var(--g50)}
         </div>
       </div>
       <div class="card">
-        <div class="ctitle">⚡ 빠른 작업</div>
+        <div class="ct">⚡ 빠른 작업</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <button class="btn btn-p" style="justify-content:center" onclick="dlBackup()">💾 백업 다운로드</button>
-          <label style="display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--g300);background:white;color:var(--g600)">
+          <button class="btn bp" style="justify-content:center" onclick="dlBackup()">💾 백업 다운로드</button>
+          <label style="display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--g300);background:var(--g0);color:var(--g600)">
             📂 백업 불러오기<input type="file" accept=".json" onchange="restoreBackup(event)" style="display:none">
           </label>
         </div>
-        <p style="font-size:12px;color:var(--danger);margin-top:12px">⚠️ 불러오기 시 현재 데이터가 모두 교체됩니다</p>
+        <p style="font-size:12px;color:var(--d);margin-top:12px">⚠️ 불러오기 시 현재 데이터가 모두 교체됩니다</p>
       </div>
     </div>
   </div>
 
   <!-- 관리자 -->
-  <div id="p-admin" class="page">
+  <div id="p-admin" class="pg">
     <div class="card" style="margin-bottom:16px">
-      <div class="ctitle">⏳ 승인 대기 중인 회원</div>
+      <div class="ct">⏳ 승인 대기 중인 회원</div>
       <div id="pList"></div>
     </div>
     <div class="card" style="margin-bottom:16px">
-      <div class="ctitle">👥 전체 회원 목록</div>
+      <div class="ct">👥 전체 회원 목록</div>
       <div class="tw"><table><thead><tr><th>이름</th><th>아이디</th><th>상태</th><th>가입일</th><th>관리</th></tr></thead><tbody id="uTb"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="ctitle">🔑 관리자 계정 변경</div>
+      <div class="ct">🔑 관리자 계정 변경</div>
       <div class="fg">
-        <div class="fgi"><label>새 아이디 (비워두면 유지)</label><input id="aNewId" placeholder="변경할 아이디"></div>
-        <div class="fgi"><label>현재 비밀번호 *</label><input id="aCurPw" type="password" placeholder="현재 비밀번호"></div>
-        <div class="fgi"><label>새 비밀번호 (비워두면 유지)</label><input id="aNewPw" type="password" placeholder="새 비밀번호"></div>
-        <div class="fgi"><label>새 비밀번호 확인</label><input id="aNewPw2" type="password"></div>
+        <div class="fi"><label>새 아이디 (비워두면 유지)</label><input id="aNewId" placeholder="변경할 아이디"></div>
+        <div class="fi"><label>현재 비밀번호 *</label><input id="aCurPw" type="password" placeholder="현재 비밀번호"></div>
+        <div class="fi"><label>새 비밀번호 (비워두면 유지)</label><input id="aNewPw" type="password" placeholder="새 비밀번호"></div>
+        <div class="fi"><label>새 비밀번호 확인</label><input id="aNewPw2" type="password"></div>
       </div>
-      <div style="margin-top:16px"><button class="btn btn-p" onclick="updateAdmin()">계정 업데이트</button></div>
+      <div style="margin-top:16px"><button class="btn bp" onclick="updateAdmin()">계정 업데이트</button></div>
     </div>
   </div>
 
@@ -310,603 +328,870 @@ tr:hover td{background:var(--g50)}
 <!-- 직원 모달 -->
 <div id="moEmp" class="mo">
   <div class="mb">
-    <div class="mh"><h3 id="moEmpTitle">직원 등록</h3><button class="mclose" onclick="closeMo('moEmp')">×</button></div>
-    <div class="mc">
-      <div class="fg">
-        <div class="fgi"><label>이름 *</label><input id="eName" placeholder="홍길동"></div>
-        <div class="fgi"><label>부서 *</label><input id="eDept" placeholder="개발팀"></div>
-        <div class="fgi"><label>직책 *</label><input id="ePos" placeholder="사원"></div>
-        <div class="fgi"><label>입사일 *</label><input type="date" id="eJoin"></div>
-        <div class="fgi"><label>전화번호</label><input id="ePhone" placeholder="010-0000-0000"></div>
-        <div class="fgi"><label>생년월일</label><input type="date" id="eBirth"></div>
-        <div class="fgi"><label>이메일</label><input type="email" id="eEmail" placeholder="email@example.com"></div>
-        <div class="fgi"><label>퇴사일</label><input type="date" id="eResign"></div>
-        <div class="fgi full"><label>메모</label><textarea id="eMemo" rows="2" style="resize:vertical" placeholder="특이사항"></textarea></div>
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-o" onclick="closeMo('moEmp')">취소</button><button class="btn btn-p" onclick="saveEmp()">저장</button></div>
+    <div class="mh"><h3 id="moEmpT">직원 등록</h3><button class="mx" onclick="closeMo('moEmp')">×</button></div>
+    <div class="mc"><div class="fg">
+      <div class="fi"><label>이름 *</label><input id="eName" placeholder="홍길동"></div>
+      <div class="fi"><label>부서 *</label><input id="eDept" placeholder="개발팀"></div>
+      <div class="fi"><label>직책 *</label><input id="ePos" placeholder="사원"></div>
+      <div class="fi"><label>입사일 *</label><input type="date" id="eJoin"></div>
+      <div class="fi"><label>전화번호</label><input id="ePhone" placeholder="010-0000-0000"></div>
+      <div class="fi"><label>생년월일</label><input type="date" id="eBirth"></div>
+      <div class="fi"><label>이메일</label><input type="email" id="eEmail"></div>
+      <div class="fi"><label>퇴사일</label><input type="date" id="eResign"></div>
+      <div class="fi full"><label>메모</label><textarea id="eMemo" rows="2" style="resize:vertical" placeholder="특이사항"></textarea></div>
+    </div></div>
+    <div class="mf"><button class="btn bo" onclick="closeMo('moEmp')">취소</button><button class="btn bp" id="empSaveBtn" onclick="saveEmp()">저장</button></div>
   </div>
 </div>
 
 <!-- 연차 모달 -->
 <div id="moLeave" class="mo">
   <div class="mb">
-    <div class="mh"><h3>연차 추가/수정</h3><button class="mclose" onclick="closeMo('moLeave')">×</button></div>
-    <div class="mc">
-      <div class="fg">
-        <div class="fgi"><label>직원 *</label><select id="lvEmp"><option value="">직원 선택</option></select></div>
-        <div class="fgi"><label>회계연도 *</label><input type="number" id="lvYr" value="2025"></div>
-        <div class="fgi"><label>총 연차일수 *</label><input type="number" id="lvTotal" placeholder="15"></div>
-        <div class="fgi"><label>사용일 추가</label><input type="number" id="lvUsed" placeholder="0" min="0"></div>
-        <div class="fgi"><label>사유</label><input id="lvReason" placeholder="사유"></div>
-        <div class="fgi"><label>날짜</label><input type="date" id="lvDate"></div>
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-o" onclick="closeMo('moLeave')">취소</button><button class="btn btn-p" onclick="saveLeave()">저장</button></div>
+    <div class="mh"><h3>연차 추가/수정</h3><button class="mx" onclick="closeMo('moLeave')">×</button></div>
+    <div class="mc"><div class="fg">
+      <div class="fi"><label>직원 *</label><select id="lvEmp"><option value="">직원 선택</option></select></div>
+      <div class="fi"><label>회계연도 *</label><input type="number" id="lvYr"></div>
+      <div class="fi"><label>총 연차일수 *</label><input type="number" id="lvTotal" placeholder="15"></div>
+      <div class="fi"><label>사용일 추가</label><input type="number" id="lvUsed" placeholder="0" min="0"></div>
+      <div class="fi"><label>사유</label><input id="lvReason" placeholder="사유"></div>
+      <div class="fi"><label>날짜</label><input type="date" id="lvDate"></div>
+    </div></div>
+    <div class="mf"><button class="btn bo" onclick="closeMo('moLeave')">취소</button><button class="btn bp" onclick="saveLeave()">저장</button></div>
   </div>
 </div>
 
 <!-- 일괄 연차 모달 -->
 <div id="moBulk" class="mo">
   <div class="mb">
-    <div class="mh"><h3>일괄 연차 지급</h3><button class="mclose" onclick="closeMo('moBulk')">×</button></div>
-    <div class="mc">
-      <div class="fg">
-        <div class="fgi"><label>회계연도 *</label><input type="number" id="blYr" value="2025"></div>
-        <div class="fgi"><label>지급 연차일수 *</label><input type="number" id="blDays" placeholder="15"></div>
-      </div>
-      <p style="font-size:13px;color:var(--g500);margin-top:12px">※ 재직 중인 모든 직원에게 일괄 지급됩니다.</p>
+    <div class="mh"><h3>일괄 연차 지급</h3><button class="mx" onclick="closeMo('moBulk')">×</button></div>
+    <div class="mc"><div class="fg">
+      <div class="fi"><label>회계연도 *</label><input type="number" id="blYr"></div>
+      <div class="fi"><label>지급 연차일수 *</label><input type="number" id="blDays" placeholder="15"></div>
     </div>
-    <div class="mf"><button class="btn btn-o" onclick="closeMo('moBulk')">취소</button><button class="btn btn-p" onclick="saveBulk()">지급</button></div>
+    <p style="font-size:13px;color:var(--g500);margin-top:12px">※ 재직 중인 모든 직원에게 일괄 지급됩니다.</p>
+    </div>
+    <div class="mf"><button class="btn bo" onclick="closeMo('moBulk')">취소</button><button class="btn bp" onclick="saveBulk()">지급</button></div>
   </div>
 </div>
 
 <!-- 교육 모달 -->
 <div id="moEdu" class="mo">
   <div class="mb">
-    <div class="mh"><h3 id="moEduTitle">교육 추가</h3><button class="mclose" onclick="closeMo('moEdu')">×</button></div>
-    <div class="mc">
-      <div class="fg">
-        <div class="fgi"><label>직원 *</label><select id="edEmp"><option value="">직원 선택</option></select></div>
-        <div class="fgi"><label>교육명 *</label><input id="edName" placeholder="안전교육"></div>
-        <div class="fgi"><label>교육일 *</label><input type="date" id="edDate"></div>
-        <div class="fgi"><label>교육 유형</label><select id="edType"><option>필수교육</option><option>직무교육</option><option>안전교육</option><option>기타</option></select></div>
-        <div class="fgi"><label>수료증</label><input id="edCert" placeholder="수료증 번호"></div>
-        <div class="fgi"><label>수료일</label><input type="date" id="edCertDate"></div>
-        <div class="fgi"><label>다음 교육일</label><input type="date" id="edNext"></div>
-        <div class="fgi"><label>메모</label><input id="edMemo" placeholder="비고"></div>
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-o" onclick="closeMo('moEdu')">취소</button><button class="btn btn-p" onclick="saveEdu()">저장</button></div>
+    <div class="mh"><h3 id="moEduT">교육 추가</h3><button class="mx" onclick="closeMo('moEdu')">×</button></div>
+    <div class="mc"><div class="fg">
+      <div class="fi"><label>직원 *</label><select id="edEmp"><option value="">직원 선택</option></select></div>
+      <div class="fi"><label>교육명 *</label><input id="edName" placeholder="안전교육"></div>
+      <div class="fi"><label>교육일 *</label><input type="date" id="edDate"></div>
+      <div class="fi"><label>교육 유형</label><select id="edType"><option>필수교육</option><option>직무교육</option><option>안전교육</option><option>기타</option></select></div>
+      <div class="fi"><label>수료증</label><input id="edCert" placeholder="수료증 번호"></div>
+      <div class="fi"><label>수료일</label><input type="date" id="edCertDate"></div>
+      <div class="fi"><label>다음 교육일</label><input type="date" id="edNext"></div>
+      <div class="fi"><label>메모</label><input id="edMemo" placeholder="비고"></div>
+    </div></div>
+    <div class="mf"><button class="btn bo" onclick="closeMo('moEdu')">취소</button><button class="btn bp" onclick="saveEdu()">저장</button></div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════
-// Firebase REST API
-// ════════════════════════════════════════
-const FB_PROJ='sangwon-hrm';
-const FB_KEY='AIzaSyBebDpB0eFP2yDZ4NK6K8IoWS8aTseHkzc';
-const FB_URL=`https://firestore.googleapis.com/v1/projects/${FB_PROJ}/databases/(default)/documents`;
+'use strict';
+// ════════════════════════════════════════════════
+// Firebase REST API 설정
+// ════════════════════════════════════════════════
+const FB_PROJ = 'sangwon-hrm';
+const FB_KEY  = 'AIzaSyBebDpB0eFP2yDZ4NK6K8IoWS8aTseHkzc';
+const FB_BASE = `https://firestore.googleapis.com/v1/projects/${FB_PROJ}/databases/(default)/documents`;
 
-function toFV(v){
-  if(v===null||v===undefined)return{nullValue:null};
-  if(typeof v==='boolean')return{booleanValue:v};
-  if(typeof v==='number')return Number.isInteger(v)?{integerValue:String(v)}:{doubleValue:v};
-  if(typeof v==='string')return{stringValue:v};
-  if(Array.isArray(v))return{arrayValue:{values:v.map(toFV)}};
-  if(typeof v==='object')return{mapValue:{fields:toFs(v)}};
-  return{stringValue:String(v)};
+// ── Firestore 타입 변환 ──────────────────────────
+function toFV(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === 'boolean')  return { booleanValue: v };
+  if (typeof v === 'number')   return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  if (typeof v === 'string')   return { stringValue: v };
+  if (Array.isArray(v))        return { arrayValue: { values: v.map(toFV) } };
+  if (typeof v === 'object')   return { mapValue: { fields: toFs(v) } };
+  return { stringValue: String(v) };
 }
-function toFs(obj){const f={};for(const[k,v]of Object.entries(obj))f[k]=toFV(v);return f;}
-function fromFV(fv){
-  if(!fv)return null;
-  if('nullValue'in fv)return null;
-  if('booleanValue'in fv)return fv.booleanValue;
-  if('integerValue'in fv)return Number(fv.integerValue);
-  if('doubleValue'in fv)return fv.doubleValue;
-  if('stringValue'in fv)return fv.stringValue;
-  if('arrayValue'in fv)return(fv.arrayValue.values||[]).map(fromFV);
-  if('mapValue'in fv)return fromFs(fv.mapValue.fields||{});
+function toFs(obj) {
+  const f = {};
+  for (const [k, v] of Object.entries(obj)) f[k] = toFV(v);
+  return f;
+}
+function fromFV(fv) {
+  if (!fv) return null;
+  if ('nullValue'    in fv) return null;
+  if ('booleanValue' in fv) return fv.booleanValue;
+  if ('integerValue' in fv) return Number(fv.integerValue);
+  if ('doubleValue'  in fv) return fv.doubleValue;
+  if ('stringValue'  in fv) return fv.stringValue;
+  if ('arrayValue'   in fv) return (fv.arrayValue.values || []).map(fromFV);
+  if ('mapValue'     in fv) return fromFs(fv.mapValue.fields || {});
   return null;
 }
-function fromFs(fields){const o={};for(const[k,v]of Object.entries(fields))o[k]=fromFV(v);return o;}
-
-async function fbGetAll(col){
-  try{
-    const r=await fetch(`${FB_URL}/${col}?key=${FB_KEY}&pageSize=500`);
-    const j=await r.json();
-    if(!j.documents)return[];
-    return j.documents.map(d=>fromFs(d.fields||{}));
-  }catch(e){console.error('fbGetAll',col,e);return[];}
-}
-async function fbSet(col,id,data){
-  try{
-    const eid=encodeURIComponent(String(id));
-    await fetch(`${FB_URL}/${col}/${eid}?key=${FB_KEY}`,{
-      method:'PATCH',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fields:toFs(JSON.parse(JSON.stringify(data)))})
-    });
-  }catch(e){console.error('fbSet',e);}
-}
-async function fbDel(col,id){
-  try{
-    const eid=encodeURIComponent(String(id));
-    await fetch(`${FB_URL}/${col}/${eid}?key=${FB_KEY}`,{method:'DELETE'});
-  }catch(e){console.error('fbDel',e);}
-}
-async function fbReplaceAll(col,arr){
-  const old=await fbGetAll(col);
-  await Promise.all(old.map(d=>fbDel(col,d.id||d.employeeId)));
-  await Promise.all(arr.map(item=>{
-    const id=String(item.id||item.employeeId||Date.now());
-    return fbSet(col,id,item);
-  }));
+function fromFs(fields) {
+  const o = {};
+  for (const [k, v] of Object.entries(fields)) o[k] = fromFV(v);
+  return o;
 }
 
-// ════════════════════════════════════════
-// 앱 상태
-// ════════════════════════════════════════
-let DB={emp:[],leave:[],edu:[],users:[]};
-let CU=null;
-let editEmp=null,editEdu=null;
-let pollTmr=null;
+// ── CRUD 함수 ────────────────────────────────────
+async function fbGetAll(col) {
+  const r = await fetch(`${FB_BASE}/${col}?key=${FB_KEY}&pageSize=500`);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json();
+  if (!j.documents) return [];
+  return j.documents.map(d => fromFs(d.fields || {}));
+}
 
-// ════════════════════════════════════════
-// 초기화
-// ════════════════════════════════════════
-async function init(){
-  const saved=sessionStorage.getItem('cu');
-  if(saved){try{CU=JSON.parse(saved);}catch(e){}}
-  await loadAll();
-  if(!DB.users.find(u=>u.role==='admin')){
-    const admin={id:'admin',pw:'admin1234',name:'관리자',role:'admin',status:'approved',createdAt:new Date().toISOString()};
-    await fbSet('sysUsers','admin',admin);
-    DB.users.push(admin);
+async function fbSet(col, id, data) {
+  const eid = encodeURIComponent(String(id));
+  const r = await fetch(`${FB_BASE}/${col}/${eid}?key=${FB_KEY}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: toFs(JSON.parse(JSON.stringify(data))) })
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+}
+
+async function fbDel(col, id) {
+  const eid = encodeURIComponent(String(id));
+  const r = await fetch(`${FB_BASE}/${col}/${eid}?key=${FB_KEY}`, { method: 'DELETE' });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+}
+
+async function fbReplaceAll(col, arr) {
+  const old = await fbGetAll(col);
+  for (const d of old) await fbDel(col, d.id || d.employeeId || '');
+  for (const item of arr) {
+    const id = String(item.id || item.employeeId || Date.now());
+    await fbSet(col, id, item);
   }
-  if(CU){
-    const fresh=DB.users.find(u=>u.id===CU.id);
-    if(fresh&&fresh.status==='approved'){
-      CU=fresh;sessionStorage.setItem('cu',JSON.stringify(CU));showApp();
-    }else{
-      sessionStorage.removeItem('cu');CU=null;showAuth();
+}
+
+// ════════════════════════════════════════════════
+// 앱 상태 (메모리 캐시)
+// ════════════════════════════════════════════════
+let DB = { emp: [], leave: [], edu: [], users: [] };
+let CU = null;       // 현재 로그인 유저
+let editEmp = null;  // 수정 중인 직원
+let editEdu = null;  // 수정 중인 교육
+
+// ════════════════════════════════════════════════
+// 초기화 — 앱 시작점
+// ════════════════════════════════════════════════
+async function init() {
+  // 1) 저장된 로그인 정보 확인
+  const saved = sessionStorage.getItem('cu');
+  if (saved) { try { CU = JSON.parse(saved); } catch(e) {} }
+
+  // 2) Firebase에서 전체 데이터 1회 로드
+  try {
+    await loadAll();
+  } catch(e) {
+    showErr('Firebase 연결 실패: ' + e.message);
+    return;
+  }
+
+  // 3) 관리자 계정 없으면 자동 생성
+  if (!DB.users.find(u => u.role === 'admin')) {
+    const adm = { id:'admin', pw:'admin1234', name:'관리자', role:'admin', status:'approved', createdAt: new Date().toISOString() };
+    await fbSet('sysUsers', 'admin', adm);
+    DB.users.push(adm);
+  }
+
+  // 4) 로그인 상태 복원 또는 인증 화면 표시
+  if (CU) {
+    const fresh = DB.users.find(u => u.id === CU.id);
+    if (fresh && fresh.status === 'approved') {
+      CU = fresh;
+      sessionStorage.setItem('cu', JSON.stringify(CU));
+      showApp();
+    } else {
+      sessionStorage.removeItem('cu');
+      CU = null;
+      showAuth();
     }
-  }else{showAuth();}
-  startPoll();
+  } else {
+    showAuth();
+  }
 }
 
-async function loadAll(){
-  const[e,l,ed,u]=await Promise.all([
-    fbGetAll('employees'),fbGetAll('annualLeaves'),
-    fbGetAll('educations'),fbGetAll('sysUsers')
+// 전체 데이터 로드 (로그인 시 + 수동 새로고침 시만 호출)
+async function loadAll() {
+  const [e, l, ed, u] = await Promise.all([
+    fbGetAll('employees'),
+    fbGetAll('annualLeaves'),
+    fbGetAll('educations'),
+    fbGetAll('sysUsers'),
   ]);
-  DB.emp=e;DB.leave=l;DB.edu=ed;DB.users=u;
+  DB.emp   = e;
+  DB.leave = l;
+  DB.edu   = ed;
+  DB.users = u;
 }
 
-function startPoll(){
-  if(pollTmr)clearInterval(pollTmr);
-  pollTmr=setInterval(async()=>{await loadAll();if(CU)refreshUI();},30000);
+// 수동 새로고침 버튼
+async function reloadData() {
+  const btn = document.querySelector('.rbtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>로딩 중...';
+  try {
+    await loadAll();
+    refreshUI();
+    btn.innerHTML = '✅ 완료!';
+    setTimeout(() => { btn.disabled = false; btn.innerHTML = '🔄 데이터 새로고침'; }, 2000);
+  } catch(e) {
+    btn.innerHTML = '❌ 실패 - 다시 시도';
+    btn.disabled = false;
+  }
 }
 
-// ════════════════════════════════════════
+function showErr(msg) {
+  document.getElementById('auth').classList.remove('on');
+  document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif">
+    <div style="font-size:48px">❌</div>
+    <h2 style="color:#dc2626">연결 오류</h2>
+    <p style="color:#6b7280">${msg}</p>
+    <button onclick="location.reload()" style="padding:10px 24px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px">다시 시도</button>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
 // 인증
-// ════════════════════════════════════════
-function switchTab(t){
-  document.querySelectorAll('.auth-tab').forEach((b,i)=>b.classList.toggle('on',(i===0&&t==='login')||(i===1&&t==='reg')));
-  document.getElementById('fLogin').classList.toggle('on',t==='login');
-  document.getElementById('fReg').classList.toggle('on',t==='reg');
+// ════════════════════════════════════════════════
+function switchTab(t) {
+  document.querySelectorAll('.atab').forEach((b, i) =>
+    b.classList.toggle('on', (i===0&&t==='login')||(i===1&&t==='reg')));
+  document.getElementById('fLogin').classList.toggle('on', t === 'login');
+  document.getElementById('fReg').classList.toggle('on', t === 'reg');
 }
-async function doLogin(){
-  const id=document.getElementById('lId').value.trim();
-  const pw=document.getElementById('lPw').value;
-  const msg=document.getElementById('lMsg');
-  msg.className='amsg';
-  if(!id||!pw){setMsg(msg,'err','아이디와 비밀번호를 입력하세요.');return;}
-  await loadAll();
-  const u=DB.users.find(u=>u.id===id&&u.pw===pw);
-  if(!u){setMsg(msg,'err','아이디 또는 비밀번호가 일치하지 않습니다.');return;}
-  if(u.status==='pending'){setMsg(msg,'err','관리자 승인 대기 중입니다.');return;}
-  if(u.status==='rejected'){setMsg(msg,'err','가입이 거절되었습니다.');return;}
-  CU=u;sessionStorage.setItem('cu',JSON.stringify(CU));showApp();
-}
-async function doRegister(){
-  const name=document.getElementById('rName').value.trim();
-  const id=document.getElementById('rId').value.trim();
-  const pw=document.getElementById('rPw').value;
-  const pw2=document.getElementById('rPw2').value;
-  const msg=document.getElementById('rMsg');
-  msg.className='amsg';
-  if(!name||!id||!pw||!pw2){setMsg(msg,'err','모든 항목을 입력하세요.');return;}
-  if(id.length<4){setMsg(msg,'err','아이디는 4자 이상이어야 합니다.');return;}
-  if(pw.length<6){setMsg(msg,'err','비밀번호는 6자 이상이어야 합니다.');return;}
-  if(pw!==pw2){setMsg(msg,'err','비밀번호가 일치하지 않습니다.');return;}
-  await loadAll();
-  if(DB.users.find(u=>u.id===id)){setMsg(msg,'err','이미 사용 중인 아이디입니다.');return;}
-  const nu={id,pw,name,role:'user',status:'pending',createdAt:new Date().toISOString()};
-  await fbSet('sysUsers',id,nu);
-  DB.users.push(nu);
-  setMsg(msg,'ok','✅ 회원가입 신청 완료! 관리자 승인 후 로그인하세요.');
-  ['rName','rId','rPw','rPw2'].forEach(x=>document.getElementById(x).value='');
-}
-function doLogout(){
-  if(!confirm('로그아웃 하시겠습니까?'))return;
-  sessionStorage.removeItem('cu');CU=null;location.reload();
-}
-function setMsg(el,type,text){el.className='amsg '+type;el.textContent=text;}
 
-// ════════════════════════════════════════
+async function doLogin() {
+  const id  = document.getElementById('lId').value.trim();
+  const pw  = document.getElementById('lPw').value;
+  const msg = document.getElementById('lMsg');
+  const btn = document.getElementById('lBtn');
+  msg.className = 'msg';
+
+  if (!id || !pw) { setMsg(msg, 'err', '아이디와 비밀번호를 입력하세요.'); return; }
+
+  // 로그인 시 최신 사용자 목록 로드 (사용자 컬렉션만)
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>확인 중...';
+  try {
+    DB.users = await fbGetAll('sysUsers');
+  } catch(e) {
+    setMsg(msg, 'err', '서버 연결 실패. 잠시 후 다시 시도하세요.');
+    btn.disabled = false; btn.innerHTML = '로그인';
+    return;
+  }
+
+  const u = DB.users.find(u => u.id === id && u.pw === pw);
+  btn.disabled = false; btn.innerHTML = '로그인';
+
+  if (!u)                    { setMsg(msg, 'err', '아이디 또는 비밀번호가 일치하지 않습니다.'); return; }
+  if (u.status === 'pending') { setMsg(msg, 'err', '관리자 승인 대기 중입니다.'); return; }
+  if (u.status === 'rejected'){ setMsg(msg, 'err', '가입이 거절되었습니다.'); return; }
+
+  CU = u;
+  sessionStorage.setItem('cu', JSON.stringify(CU));
+
+  // 나머지 데이터 로드 후 앱 표시
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>데이터 로딩 중...';
+  try {
+    const [e, l, ed] = await Promise.all([
+      fbGetAll('employees'),
+      fbGetAll('annualLeaves'),
+      fbGetAll('educations'),
+    ]);
+    DB.emp = e; DB.leave = l; DB.edu = ed;
+  } catch(e) {
+    console.warn('데이터 로드 일부 실패', e);
+  }
+  btn.disabled = false; btn.innerHTML = '로그인';
+  showApp();
+}
+
+async function doRegister() {
+  const name = document.getElementById('rName').value.trim();
+  const id   = document.getElementById('rId').value.trim();
+  const pw   = document.getElementById('rPw').value;
+  const pw2  = document.getElementById('rPw2').value;
+  const msg  = document.getElementById('rMsg');
+  const btn  = document.getElementById('rBtn');
+  msg.className = 'msg';
+
+  if (!name||!id||!pw||!pw2) { setMsg(msg,'err','모든 항목을 입력하세요.'); return; }
+  if (id.length < 4)          { setMsg(msg,'err','아이디는 4자 이상이어야 합니다.'); return; }
+  if (pw.length < 6)          { setMsg(msg,'err','비밀번호는 6자 이상이어야 합니다.'); return; }
+  if (pw !== pw2)             { setMsg(msg,'err','비밀번호가 일치하지 않습니다.'); return; }
+
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>처리 중...';
+  try {
+    DB.users = await fbGetAll('sysUsers');
+    if (DB.users.find(u => u.id === id)) {
+      setMsg(msg, 'err', '이미 사용 중인 아이디입니다.');
+      btn.disabled = false; btn.innerHTML = '회원가입 신청';
+      return;
+    }
+    const nu = { id, pw, name, role:'user', status:'pending', createdAt: new Date().toISOString() };
+    await fbSet('sysUsers', id, nu);
+    DB.users.push(nu);
+    setMsg(msg, 'ok', '✅ 회원가입 신청 완료! 관리자 승인 후 로그인하세요.');
+    ['rName','rId','rPw','rPw2'].forEach(x => document.getElementById(x).value = '');
+  } catch(e) {
+    setMsg(msg, 'err', '서버 오류. 잠시 후 다시 시도하세요.');
+  }
+  btn.disabled = false; btn.innerHTML = '회원가입 신청';
+}
+
+function doLogout() {
+  if (!confirm('로그아웃 하시겠습니까?')) return;
+  sessionStorage.removeItem('cu');
+  CU = null;
+  location.reload();
+}
+
+function setMsg(el, type, text) { el.className = 'msg ' + type; el.textContent = text; }
+
+// ════════════════════════════════════════════════
 // 화면 전환
-// ════════════════════════════════════════
-function showAuth(){
-  document.getElementById('authOverlay').classList.add('on');
-  document.getElementById('hdr').style.display='none';
-  document.getElementById('nav').style.display='none';
-  document.getElementById('main').style.display='none';
+// ════════════════════════════════════════════════
+function showAuth() {
+  document.getElementById('auth').classList.add('on');
+  document.getElementById('hdr').style.display = 'none';
+  document.getElementById('refreshBar').style.display = 'none';
+  document.getElementById('nav').style.display = 'none';
+  document.getElementById('main').style.display = 'none';
 }
-function showApp(){
-  document.getElementById('authOverlay').classList.remove('on');
-  document.getElementById('hdr').style.display='';
-  document.getElementById('nav').style.display='';
-  document.getElementById('main').style.display='';
-  document.getElementById('hName').textContent=CU.name;
-  const b=document.getElementById('hBadge');
-  b.textContent=CU.role==='admin'?'관리자':'일반';
-  b.className='ubadge '+(CU.role==='admin'?'admin':'user');
-  document.getElementById('nAdmin').style.display=CU.role==='admin'?'':'none';
-  document.getElementById('nLeave').style.display=CU.role==='admin'?'':'none';
-  const ly=document.getElementById('leaveYr');
-  const yr=new Date().getFullYear();
-  ly.innerHTML='';
-  for(let y=yr+1;y>=yr-3;y--)ly.innerHTML+=`<option value="${y}">${y}년</option>`;
-  ly.value=yr;
-  refreshUI();go('dash');
-}
-function refreshUI(){
-  renderDash();renderEmp();renderLeave();renderEdu();
-  document.getElementById('bkE').textContent=DB.emp.length+'명';
-  document.getElementById('bkL').textContent=DB.leave.length+'건';
-  document.getElementById('bkEd').textContent=DB.edu.length+'건';
-  if(CU&&CU.role==='admin')renderAdmin();
-}
-function go(name,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('p-'+name).classList.add('on');
-  if(btn)btn.classList.add('on');
-  else document.querySelectorAll('.nbtn').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${name}'`))b.classList.add('on');});
-  if(name==='admin')renderAdmin();
-}
-function closeMo(id){document.getElementById(id).classList.remove('on');}
 
-// ════════════════════════════════════════
+function showApp() {
+  document.getElementById('auth').classList.remove('on');
+  document.getElementById('hdr').style.display = '';
+  document.getElementById('refreshBar').style.display = '';
+  document.getElementById('nav').style.display = '';
+  document.getElementById('main').style.display = '';
+
+  // 헤더 정보
+  document.getElementById('hName').textContent = CU.name;
+  const b = document.getElementById('hBadge');
+  b.textContent = CU.role === 'admin' ? '관리자' : '일반';
+  b.className   = 'ub ' + CU.role;
+
+  // 관리자 전용 탭
+  document.getElementById('nAdmin').style.display = CU.role === 'admin' ? '' : 'none';
+  document.getElementById('nLeave').style.display = CU.role === 'admin' ? '' : 'none';
+
+  // 연도 셀렉트 초기화
+  const ly  = document.getElementById('leaveYr');
+  const yr  = new Date().getFullYear();
+  ly.innerHTML = '';
+  for (let y = yr+1; y >= yr-3; y--) ly.innerHTML += `<option value="${y}">${y}년</option>`;
+  ly.value = yr;
+
+  refreshUI();
+  go('dash');
+}
+
+function refreshUI() {
+  renderDash();
+  renderEmp();
+  renderLeave();
+  renderEdu();
+  document.getElementById('bkE').textContent  = DB.emp.length   + '명';
+  document.getElementById('bkL').textContent  = DB.leave.length + '건';
+  document.getElementById('bkEd').textContent = DB.edu.length   + '건';
+  if (CU && CU.role === 'admin') renderAdmin();
+}
+
+function go(name, btn) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + name).classList.add('on');
+  if (btn) btn.classList.add('on');
+  else document.querySelectorAll('.nb').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${name}'`)) b.classList.add('on');
+  });
+}
+
+function closeMo(id) { document.getElementById(id).classList.remove('on'); }
+
+// ════════════════════════════════════════════════
 // 대시보드
-// ════════════════════════════════════════
-function renderDash(){
-  const now=new Date();
-  const total=DB.emp.length;
-  const active=DB.emp.filter(e=>!e.resignDate||new Date(e.resignDate)>now).length;
-  const mon=now.getMonth()+1;
-  const bday=DB.emp.filter(e=>e.birthDate&&new Date(e.birthDate).getMonth()+1===mon).length;
-  document.getElementById('dTotal').textContent=total;
-  document.getElementById('dActive').textContent=active;
-  document.getElementById('dInactive').textContent=total-active;
-  document.getElementById('dBday').textContent=bday;
-  const recent=[...DB.emp].sort((a,b)=>new Date(b.joinDate||0)-new Date(a.joinDate||0)).slice(0,5);
-  const el=document.getElementById('dRecent');
-  if(!recent.length){el.innerHTML='<div class="empty"><div class="ico">👥</div><p>등록된 직원이 없습니다</p></div>';return;}
-  el.innerHTML=`<div class="tw"><table><thead><tr><th>이름</th><th>부서</th><th>직책</th><th>입사일</th><th>상태</th></tr></thead><tbody>${
-    recent.map(e=>`<tr><td><strong>${e.name}</strong></td><td>${e.department||'-'}</td><td>${e.position||'-'}</td><td>${e.joinDate?new Date(e.joinDate).toLocaleDateString('ko-KR'):'-'}</td><td>${!e.resignDate||new Date(e.resignDate)>now?'<span class="badge b-gr">재직</span>':'<span class="badge b-gy">퇴사</span>'}</td></tr>`).join('')
-  }</tbody></table></div>`;
+// ════════════════════════════════════════════════
+function renderDash() {
+  const now    = new Date();
+  const total  = DB.emp.length;
+  const active = DB.emp.filter(e => !e.resignDate || new Date(e.resignDate) > now).length;
+  const mon    = now.getMonth() + 1;
+  const bday   = DB.emp.filter(e => e.birthDate && new Date(e.birthDate).getMonth()+1 === mon).length;
+
+  document.getElementById('dTotal').textContent    = total;
+  document.getElementById('dActive').textContent   = active;
+  document.getElementById('dInactive').textContent = total - active;
+  document.getElementById('dBday').textContent     = bday;
+
+  const recent = [...DB.emp].sort((a,b) => new Date(b.joinDate||0) - new Date(a.joinDate||0)).slice(0, 5);
+  const el     = document.getElementById('dRecent');
+  if (!recent.length) {
+    el.innerHTML = '<div class="empty"><div class="ico">👥</div><p>등록된 직원이 없습니다</p></div>';
+    return;
+  }
+  el.innerHTML = `<div class="tw"><table>
+    <thead><tr><th>이름</th><th>부서</th><th>직책</th><th>입사일</th><th>상태</th></tr></thead>
+    <tbody>${recent.map(e => `<tr>
+      <td><strong>${e.name}</strong></td>
+      <td>${e.department||'-'}</td>
+      <td>${e.position||'-'}</td>
+      <td>${e.joinDate ? new Date(e.joinDate).toLocaleDateString('ko-KR') : '-'}</td>
+      <td>${!e.resignDate||new Date(e.resignDate)>now ? '<span class="badge bgr">재직</span>' : '<span class="badge bgy">퇴사</span>'}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════════════════════
 // 직원관리
-// ════════════════════════════════════════
-function renderEmp(){
-  const q=(document.getElementById('empQ')||{}).value||'';
-  const now=new Date();
-  let list=DB.emp.filter(e=>!q||(e.name||'').includes(q)||(e.department||'').includes(q)||(e.position||'').includes(q));
-  list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
-  const tb=document.getElementById('empTb');
-  if(!list.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ico">👥</div><p>직원이 없습니다</p></div></td></tr>';return;}
-  tb.innerHTML=list.map(e=>{
-    const on=!e.resignDate||new Date(e.resignDate)>now;
-    return`<tr><td><strong>${e.name}</strong></td><td>${e.department||'-'}</td><td>${e.position||'-'}</td><td>${e.joinDate?new Date(e.joinDate).toLocaleDateString('ko-KR'):'-'}</td><td>${e.phone||'-'}</td><td>${on?'<span class="badge b-gr">재직</span>':'<span class="badge b-gy">퇴사</span>'}</td><td>
-      <button class="btn btn-o btn-sm" onclick="openEmpMo('${e.id}')">수정</button>
-      <button class="btn btn-d btn-sm" style="margin-left:4px" onclick="delEmp('${e.id}')">삭제</button>
-    </td></tr>`;
+// ════════════════════════════════════════════════
+function renderEmp() {
+  const q   = (document.getElementById('empQ')||{}).value || '';
+  const now = new Date();
+  const list = DB.emp
+    .filter(e => !q || (e.name||'').includes(q) || (e.department||'').includes(q) || (e.position||'').includes(q))
+    .sort((a,b) => (a.name||'').localeCompare(b.name||''));
+
+  const tb = document.getElementById('empTb');
+  if (!list.length) {
+    tb.innerHTML = '<tr><td colspan="7"><div class="empty"><div class="ico">👥</div><p>직원이 없습니다</p></div></td></tr>';
+    return;
+  }
+  tb.innerHTML = list.map(e => {
+    const on = !e.resignDate || new Date(e.resignDate) > now;
+    return `<tr>
+      <td><strong>${e.name}</strong></td>
+      <td>${e.department||'-'}</td>
+      <td>${e.position||'-'}</td>
+      <td>${e.joinDate ? new Date(e.joinDate).toLocaleDateString('ko-KR') : '-'}</td>
+      <td>${e.phone||'-'}</td>
+      <td>${on ? '<span class="badge bgr">재직</span>' : '<span class="badge bgy">퇴사</span>'}</td>
+      <td>
+        <button class="btn bo bsm" onclick="openEmpMo('${e.id}')">수정</button>
+        <button class="btn bd bsm" style="margin-left:4px" onclick="delEmp('${e.id}')">삭제</button>
+      </td>
+    </tr>`;
   }).join('');
 }
-function openEmpMo(id){
-  editEmp=id?DB.emp.find(e=>e.id===id):null;
-  document.getElementById('moEmpTitle').textContent=editEmp?'직원 수정':'직원 등록';
-  const f=editEmp||{};
-  document.getElementById('eName').value=f.name||'';
-  document.getElementById('eDept').value=f.department||'';
-  document.getElementById('ePos').value=f.position||'';
-  document.getElementById('eJoin').value=f.joinDate||'';
-  document.getElementById('ePhone').value=f.phone||'';
-  document.getElementById('eBirth').value=f.birthDate||'';
-  document.getElementById('eEmail').value=f.email||'';
-  document.getElementById('eResign').value=f.resignDate||'';
-  document.getElementById('eMemo').value=f.memo||'';
+
+function openEmpMo(id) {
+  editEmp = id ? DB.emp.find(e => e.id === id) : null;
+  document.getElementById('moEmpT').textContent = editEmp ? '직원 수정' : '직원 등록';
+  const f = editEmp || {};
+  ['eName','eDept','ePos','eJoin','ePhone','eBirth','eEmail','eResign','eMemo'].forEach(x => {
+    const el = document.getElementById(x);
+    el.value = '';
+  });
+  if (f.name)       document.getElementById('eName').value   = f.name;
+  if (f.department) document.getElementById('eDept').value   = f.department;
+  if (f.position)   document.getElementById('ePos').value    = f.position;
+  if (f.joinDate)   document.getElementById('eJoin').value   = f.joinDate;
+  if (f.phone)      document.getElementById('ePhone').value  = f.phone;
+  if (f.birthDate)  document.getElementById('eBirth').value  = f.birthDate;
+  if (f.email)      document.getElementById('eEmail').value  = f.email;
+  if (f.resignDate) document.getElementById('eResign').value = f.resignDate;
+  if (f.memo)       document.getElementById('eMemo').value   = f.memo;
   document.getElementById('moEmp').classList.add('on');
 }
-async function saveEmp(){
-  const name=document.getElementById('eName').value.trim();
-  const dept=document.getElementById('eDept').value.trim();
-  const pos=document.getElementById('ePos').value.trim();
-  const join=document.getElementById('eJoin').value;
-  if(!name||!dept||!pos||!join){alert('이름, 부서, 직책, 입사일은 필수입니다.');return;}
-  const id=editEmp?editEmp.id:'emp_'+Date.now();
-  const emp={id,name,department:dept,position:pos,joinDate:join,
-    phone:document.getElementById('ePhone').value.trim(),
-    birthDate:document.getElementById('eBirth').value,
-    email:document.getElementById('eEmail').value.trim(),
-    resignDate:document.getElementById('eResign').value,
-    memo:document.getElementById('eMemo').value.trim(),
-    updatedAt:new Date().toISOString()
+
+async function saveEmp() {
+  const name = document.getElementById('eName').value.trim();
+  const dept = document.getElementById('eDept').value.trim();
+  const pos  = document.getElementById('ePos').value.trim();
+  const join = document.getElementById('eJoin').value;
+  if (!name||!dept||!pos||!join) { alert('이름, 부서, 직책, 입사일은 필수입니다.'); return; }
+
+  const btn = document.getElementById('empSaveBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>저장 중...';
+
+  const id  = editEmp ? editEmp.id : 'emp_' + Date.now();
+  const emp = {
+    id, name, department: dept, position: pos, joinDate: join,
+    phone:      document.getElementById('ePhone').value.trim(),
+    birthDate:  document.getElementById('eBirth').value,
+    email:      document.getElementById('eEmail').value.trim(),
+    resignDate: document.getElementById('eResign').value,
+    memo:       document.getElementById('eMemo').value.trim(),
+    updatedAt:  new Date().toISOString()
   };
-  await fbSet('employees',id,emp);
-  const idx=DB.emp.findIndex(e=>e.id===id);
-  if(idx>=0)DB.emp[idx]=emp;else DB.emp.push(emp);
-  closeMo('moEmp');renderDash();renderEmp();
-}
-async function delEmp(id){
-  if(!confirm('이 직원을 삭제하시겠습니까?'))return;
-  await fbDel('employees',id);
-  DB.emp=DB.emp.filter(e=>e.id!==id);
-  renderDash();renderEmp();
+
+  try {
+    await fbSet('employees', id, emp);
+    const idx = DB.emp.findIndex(e => e.id === id);
+    if (idx >= 0) DB.emp[idx] = emp; else DB.emp.push(emp);
+    closeMo('moEmp');
+    renderDash(); renderEmp();
+  } catch(e) {
+    alert('저장 실패: ' + e.message);
+  }
+  btn.disabled = false; btn.innerHTML = '저장';
 }
 
-// ════════════════════════════════════════
+async function delEmp(id) {
+  if (!confirm('이 직원을 삭제하시겠습니까?')) return;
+  try {
+    await fbDel('employees', id);
+    DB.emp = DB.emp.filter(e => e.id !== id);
+    renderDash(); renderEmp();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
+}
+
+// ════════════════════════════════════════════════
 // 연차관리
-// ════════════════════════════════════════
-function renderLeave(){
-  if(!CU||CU.role!=='admin')return;
-  const yr=parseInt((document.getElementById('leaveYr')||{}).value||new Date().getFullYear());
-  const now=new Date();
-  const active=DB.emp.filter(e=>!e.resignDate||new Date(e.resignDate)>now);
-  const tb=document.getElementById('leaveTb');
-  if(!active.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ico">📅</div><p>재직 직원이 없습니다</p></div></td></tr>';return;}
-  tb.innerHTML=active.map(emp=>{
-    const lv=DB.leave.find(l=>l.employeeId===emp.id&&Number(l.year)===yr);
-    const total=lv?Number(lv.totalDays)||0:0;
-    const used=lv?(lv.usageHistory||[]).reduce((s,h)=>s+Number(h.days||0),0):0;
-    const remain=total-used;
-    const pct=total>0?Math.min(100,Math.round(used/total*100)):0;
-    return`<tr><td><strong>${emp.name}</strong></td><td>${emp.department||'-'}</td><td>${total}일</td><td>${used}일</td><td>${remain}일</td>
-      <td><div style="display:flex;align-items:center;gap:8px"><div class="lb-wrap"><div class="lb" style="width:${pct}%;background:${pct>80?'var(--danger)':'var(--primary)'}"></div></div><span style="font-size:12px;color:var(--g500)">${pct}%</span></div></td>
+// ════════════════════════════════════════════════
+function renderLeave() {
+  if (!CU || CU.role !== 'admin') return;
+  const yr  = parseInt((document.getElementById('leaveYr')||{}).value || new Date().getFullYear());
+  const now = new Date();
+  const active = DB.emp.filter(e => !e.resignDate || new Date(e.resignDate) > now);
+  const tb = document.getElementById('leaveTb');
+
+  if (!active.length) {
+    tb.innerHTML = '<tr><td colspan="7"><div class="empty"><div class="ico">📅</div><p>재직 직원이 없습니다</p></div></td></tr>';
+    return;
+  }
+  tb.innerHTML = active.map(emp => {
+    const lv     = DB.leave.find(l => l.employeeId === emp.id && Number(l.year) === yr);
+    const total  = lv ? Number(lv.totalDays)||0 : 0;
+    const used   = lv ? (lv.usageHistory||[]).reduce((s,h) => s+Number(h.days||0), 0) : 0;
+    const remain = total - used;
+    const pct    = total > 0 ? Math.min(100, Math.round(used/total*100)) : 0;
+    const barClr = pct > 80 ? 'var(--d)' : 'var(--p)';
+
+    return `<tr>
+      <td><strong>${emp.name}</strong></td>
+      <td>${emp.department||'-'}</td>
+      <td>${total}일</td>
+      <td>${used}일</td>
+      <td>${remain}일</td>
       <td>
-        <button class="btn btn-o btn-sm" onclick="openLeaveMo('${emp.id}')">추가</button>
-        ${lv?`<button class="btn btn-d btn-sm" style="margin-left:4px" onclick="delLeave('${emp.id}',${yr})">삭제</button>`:''}
-      </td></tr>`;
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="lbw"><div class="lbb" style="width:${pct}%;background:${barClr}"></div></div>
+          <span style="font-size:12px;color:var(--g500)">${pct}%</span>
+        </div>
+      </td>
+      <td>
+        <button class="btn bo bsm" onclick="openLeaveMo('${emp.id}')">추가</button>
+        ${lv ? `<button class="btn bd bsm" style="margin-left:4px" onclick="delLeave('${emp.id}',${yr})">삭제</button>` : ''}
+      </td>
+    </tr>`;
   }).join('');
 }
-function openLeaveMo(empId){
-  const sel=document.getElementById('lvEmp');
-  sel.innerHTML='<option value="">직원 선택</option>';
-  DB.emp.filter(e=>!e.resignDate||new Date(e.resignDate)>new Date()).forEach(e=>{
-    sel.innerHTML+=`<option value="${e.id}" ${e.id===empId?'selected':''}>${e.name} (${e.department||'-'})</option>`;
-  });
-  document.getElementById('lvYr').value=(document.getElementById('leaveYr')||{}).value||new Date().getFullYear();
-  document.getElementById('lvTotal').value='';
-  document.getElementById('lvUsed').value='';
-  document.getElementById('lvReason').value='';
-  document.getElementById('lvDate').value=new Date().toISOString().slice(0,10);
+
+function openLeaveMo(empId) {
+  const sel = document.getElementById('lvEmp');
+  sel.innerHTML = '<option value="">직원 선택</option>';
+  DB.emp.filter(e => !e.resignDate || new Date(e.resignDate) > new Date()).forEach(e =>
+    sel.innerHTML += `<option value="${e.id}" ${e.id===empId?'selected':''}>${e.name} (${e.department||'-'})</option>`
+  );
+  document.getElementById('lvYr').value     = (document.getElementById('leaveYr')||{}).value || new Date().getFullYear();
+  document.getElementById('lvTotal').value  = '';
+  document.getElementById('lvUsed').value   = '';
+  document.getElementById('lvReason').value = '';
+  document.getElementById('lvDate').value   = new Date().toISOString().slice(0,10);
   document.getElementById('moLeave').classList.add('on');
 }
-async function saveLeave(){
-  const empId=document.getElementById('lvEmp').value;
-  const yr=parseInt(document.getElementById('lvYr').value);
-  const total=parseInt(document.getElementById('lvTotal').value);
-  const used=parseInt(document.getElementById('lvUsed').value)||0;
-  const reason=document.getElementById('lvReason').value.trim();
-  const date=document.getElementById('lvDate').value;
-  if(!empId||!yr||isNaN(total)){alert('직원, 연도, 총 연차일수는 필수입니다.');return;}
-  const emp=DB.emp.find(e=>e.id===empId);
-  const lid=`lv_${empId}_${yr}`;
-  let lv=DB.leave.find(l=>l.id===lid);
-  if(lv){
-    lv.totalDays=total;
-    if(used>0)lv.usageHistory=[...(lv.usageHistory||[]),{days:used,reason,date,recordDate:new Date().toISOString()}];
-  }else{
-    lv={id:lid,employeeId:empId,employeeName:emp.name,year:yr,totalDays:total,usageHistory:used>0?[{days:used,reason,date,recordDate:new Date().toISOString()}]:[]};
+
+async function saveLeave() {
+  const empId  = document.getElementById('lvEmp').value;
+  const yr     = parseInt(document.getElementById('lvYr').value);
+  const total  = parseInt(document.getElementById('lvTotal').value);
+  const used   = parseInt(document.getElementById('lvUsed').value) || 0;
+  const reason = document.getElementById('lvReason').value.trim();
+  const date   = document.getElementById('lvDate').value;
+  if (!empId||!yr||isNaN(total)) { alert('직원, 연도, 총 연차일수는 필수입니다.'); return; }
+
+  const emp = DB.emp.find(e => e.id === empId);
+  const lid = `lv_${empId}_${yr}`;
+  let lv    = DB.leave.find(l => l.id === lid);
+
+  if (lv) {
+    lv.totalDays = total;
+    if (used > 0) lv.usageHistory = [...(lv.usageHistory||[]), { days:used, reason, date, recordDate:new Date().toISOString() }];
+  } else {
+    lv = { id:lid, employeeId:empId, employeeName:emp.name, year:yr, totalDays:total,
+           usageHistory: used>0 ? [{ days:used, reason, date, recordDate:new Date().toISOString() }] : [] };
     DB.leave.push(lv);
   }
-  await fbSet('annualLeaves',lid,lv);
-  const idx=DB.leave.findIndex(l=>l.id===lid);
-  if(idx>=0)DB.leave[idx]=lv;
-  closeMo('moLeave');renderLeave();
+
+  try {
+    await fbSet('annualLeaves', lid, lv);
+    const idx = DB.leave.findIndex(l => l.id === lid);
+    if (idx >= 0) DB.leave[idx] = lv;
+    closeMo('moLeave'); renderLeave();
+  } catch(e) { alert('저장 실패: ' + e.message); }
 }
-async function delLeave(empId,yr){
-  if(!confirm('이 연차 데이터를 삭제하시겠습니까?'))return;
-  const lid=`lv_${empId}_${yr}`;
-  await fbDel('annualLeaves',lid);
-  DB.leave=DB.leave.filter(l=>l.id!==lid);renderLeave();
+
+async function delLeave(empId, yr) {
+  if (!confirm('이 연차 데이터를 삭제하시겠습니까?')) return;
+  const lid = `lv_${empId}_${yr}`;
+  try {
+    await fbDel('annualLeaves', lid);
+    DB.leave = DB.leave.filter(l => l.id !== lid);
+    renderLeave();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
 }
-function openBulkMo(){
-  document.getElementById('blYr').value=new Date().getFullYear();
-  document.getElementById('blDays').value='';
+
+function openBulkMo() {
+  document.getElementById('blYr').value  = new Date().getFullYear();
+  document.getElementById('blDays').value = '';
   document.getElementById('moBulk').classList.add('on');
 }
-async function saveBulk(){
-  const yr=parseInt(document.getElementById('blYr').value);
-  const days=parseInt(document.getElementById('blDays').value);
-  if(!yr||isNaN(days)||days<=0){alert('연도와 지급일수를 입력하세요.');return;}
-  const active=DB.emp.filter(e=>!e.resignDate||new Date(e.resignDate)>new Date());
-  for(const emp of active){
-    const lid=`lv_${emp.id}_${yr}`;
-    let lv=DB.leave.find(l=>l.id===lid);
-    if(!lv){lv={id:lid,employeeId:emp.id,employeeName:emp.name,year:yr,totalDays:days,usageHistory:[]};DB.leave.push(lv);}
-    else lv.totalDays=days;
-    await fbSet('annualLeaves',lid,lv);
-    const idx=DB.leave.findIndex(l=>l.id===lid);if(idx>=0)DB.leave[idx]=lv;
-  }
-  closeMo('moBulk');renderLeave();
-  alert(`✅ ${active.length}명에게 ${days}일 연차를 지급했습니다.`);
+
+async function saveBulk() {
+  const yr   = parseInt(document.getElementById('blYr').value);
+  const days = parseInt(document.getElementById('blDays').value);
+  if (!yr||isNaN(days)||days<=0) { alert('연도와 지급일수를 입력하세요.'); return; }
+
+  const active = DB.emp.filter(e => !e.resignDate || new Date(e.resignDate) > new Date());
+  try {
+    for (const emp of active) {
+      const lid = `lv_${emp.id}_${yr}`;
+      let lv = DB.leave.find(l => l.id === lid);
+      if (!lv) {
+        lv = { id:lid, employeeId:emp.id, employeeName:emp.name, year:yr, totalDays:days, usageHistory:[] };
+        DB.leave.push(lv);
+      } else { lv.totalDays = days; }
+      await fbSet('annualLeaves', lid, lv);
+      const idx = DB.leave.findIndex(l => l.id === lid);
+      if (idx >= 0) DB.leave[idx] = lv;
+    }
+    closeMo('moBulk'); renderLeave();
+    alert(`✅ ${active.length}명에게 ${days}일 연차를 지급했습니다.`);
+  } catch(e) { alert('저장 실패: ' + e.message); }
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════════════════════
 // 직무교육
-// ════════════════════════════════════════
-function renderEdu(){
-  const q=(document.getElementById('eduQ')||{}).value||'';
-  const now=new Date();
-  let list=DB.edu.filter(e=>!q||(e.employeeName||'').includes(q)||(e.name||'').includes(q));
-  list.sort((a,b)=>new Date(b.educationDate||0)-new Date(a.educationDate||0));
-  const tb=document.getElementById('eduTb');
-  if(!list.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><div class="ico">📚</div><p>교육 데이터가 없습니다</p></div></td></tr>';return;}
-  tb.innerHTML=list.map(e=>{
-    let badge='<span class="badge b-gy">-</span>';
-    if(e.nextDate){
-      const diff=Math.ceil((new Date(e.nextDate)-now)/86400000);
-      if(diff<0)badge='<span class="badge b-rd">만료</span>';
-      else if(diff<30)badge=`<span class="badge b-yw">D-${diff}</span>`;
-      else badge=`<span class="badge b-gr">D-${diff}</span>`;
+// ════════════════════════════════════════════════
+function renderEdu() {
+  const q   = (document.getElementById('eduQ')||{}).value || '';
+  const now = new Date();
+  const list = DB.edu
+    .filter(e => !q || (e.employeeName||'').includes(q) || (e.name||'').includes(q))
+    .sort((a,b) => new Date(b.educationDate||0) - new Date(a.educationDate||0));
+
+  const tb = document.getElementById('eduTb');
+  if (!list.length) {
+    tb.innerHTML = '<tr><td colspan="7"><div class="empty"><div class="ico">📚</div><p>교육 데이터가 없습니다</p></div></td></tr>';
+    return;
+  }
+  tb.innerHTML = list.map(e => {
+    let badge = '<span class="badge bgy">-</span>';
+    if (e.nextDate) {
+      const diff = Math.ceil((new Date(e.nextDate) - now) / 86400000);
+      if      (diff < 0)  badge = '<span class="badge brd">만료</span>';
+      else if (diff < 30) badge = `<span class="badge byw">D-${diff}</span>`;
+      else                badge = `<span class="badge bgr">D-${diff}</span>`;
     }
-    return`<tr><td><strong>${e.employeeName||'-'}</strong></td><td>${e.name||'-'}</td><td>${e.educationDate?new Date(e.educationDate).toLocaleDateString('ko-KR'):'-'}</td><td>${e.certificate||'-'}</td><td>${e.nextDate?new Date(e.nextDate).toLocaleDateString('ko-KR'):'-'}</td><td>${badge}</td><td>
-      <button class="btn btn-o btn-sm" onclick="openEduMo('${e.id}')">수정</button>
-      <button class="btn btn-d btn-sm" style="margin-left:4px" onclick="delEdu('${e.id}')">삭제</button>
-    </td></tr>`;
+    return `<tr>
+      <td><strong>${e.employeeName||'-'}</strong></td>
+      <td>${e.name||'-'}</td>
+      <td>${e.educationDate ? new Date(e.educationDate).toLocaleDateString('ko-KR') : '-'}</td>
+      <td>${e.certificate||'-'}</td>
+      <td>${e.nextDate ? new Date(e.nextDate).toLocaleDateString('ko-KR') : '-'}</td>
+      <td>${badge}</td>
+      <td>
+        <button class="btn bo bsm" onclick="openEduMo('${e.id}')">수정</button>
+        <button class="btn bd bsm" style="margin-left:4px" onclick="delEdu('${e.id}')">삭제</button>
+      </td>
+    </tr>`;
   }).join('');
 }
-function openEduMo(id){
-  editEdu=id?DB.edu.find(e=>e.id===id):null;
-  document.getElementById('moEduTitle').textContent=editEdu?'교육 수정':'교육 추가';
-  const sel=document.getElementById('edEmp');
-  sel.innerHTML='<option value="">직원 선택</option>';
-  DB.emp.forEach(e=>sel.innerHTML+=`<option value="${e.id}|${e.name}" ${editEdu&&editEdu.employeeId===e.id?'selected':''}>${e.name} (${e.department||'-'})</option>`);
-  const f=editEdu||{};
-  document.getElementById('edName').value=f.name||'';
-  document.getElementById('edDate').value=f.educationDate||'';
-  document.getElementById('edType').value=f.type||'필수교육';
-  document.getElementById('edCert').value=f.certificate||'';
-  document.getElementById('edCertDate').value=f.certificateDate||'';
-  document.getElementById('edNext').value=f.nextDate||'';
-  document.getElementById('edMemo').value=f.memo||'';
+
+function openEduMo(id) {
+  editEdu = id ? DB.edu.find(e => e.id === id) : null;
+  document.getElementById('moEduT').textContent = editEdu ? '교육 수정' : '교육 추가';
+  const sel = document.getElementById('edEmp');
+  sel.innerHTML = '<option value="">직원 선택</option>';
+  DB.emp.forEach(e =>
+    sel.innerHTML += `<option value="${e.id}|${e.name}" ${editEdu&&editEdu.employeeId===e.id?'selected':''}>${e.name} (${e.department||'-'})</option>`
+  );
+  const f = editEdu || {};
+  document.getElementById('edName').value     = f.name||'';
+  document.getElementById('edDate').value     = f.educationDate||'';
+  document.getElementById('edType').value     = f.type||'필수교육';
+  document.getElementById('edCert').value     = f.certificate||'';
+  document.getElementById('edCertDate').value = f.certificateDate||'';
+  document.getElementById('edNext').value     = f.nextDate||'';
+  document.getElementById('edMemo').value     = f.memo||'';
   document.getElementById('moEdu').classList.add('on');
 }
-async function saveEdu(){
-  const ev=document.getElementById('edEmp').value;
-  const name=document.getElementById('edName').value.trim();
-  const date=document.getElementById('edDate').value;
-  if(!ev||!name||!date){alert('직원, 교육명, 교육일은 필수입니다.');return;}
-  const[empId,empName]=ev.split('|');
-  const id=editEdu?editEdu.id:'edu_'+Date.now();
-  const edu={id,employeeId:empId,employeeName:empName,name,educationDate:date,
-    type:document.getElementById('edType').value,
-    certificate:document.getElementById('edCert').value.trim(),
-    certificateDate:document.getElementById('edCertDate').value,
-    nextDate:document.getElementById('edNext').value,
-    memo:document.getElementById('edMemo').value.trim()
+
+async function saveEdu() {
+  const ev   = document.getElementById('edEmp').value;
+  const name = document.getElementById('edName').value.trim();
+  const date = document.getElementById('edDate').value;
+  if (!ev||!name||!date) { alert('직원, 교육명, 교육일은 필수입니다.'); return; }
+
+  const [empId, empName] = ev.split('|');
+  const id  = editEdu ? editEdu.id : 'edu_' + Date.now();
+  const edu = {
+    id, employeeId: empId, employeeName: empName, name, educationDate: date,
+    type:            document.getElementById('edType').value,
+    certificate:     document.getElementById('edCert').value.trim(),
+    certificateDate: document.getElementById('edCertDate').value,
+    nextDate:        document.getElementById('edNext').value,
+    memo:            document.getElementById('edMemo').value.trim(),
   };
-  await fbSet('educations',id,edu);
-  const idx=DB.edu.findIndex(e=>e.id===id);
-  if(idx>=0)DB.edu[idx]=edu;else DB.edu.push(edu);
-  closeMo('moEdu');renderEdu();
-}
-async function delEdu(id){
-  if(!confirm('이 교육 기록을 삭제하시겠습니까?'))return;
-  await fbDel('educations',id);
-  DB.edu=DB.edu.filter(e=>e.id!==id);renderEdu();
+
+  try {
+    await fbSet('educations', id, edu);
+    const idx = DB.edu.findIndex(e => e.id === id);
+    if (idx >= 0) DB.edu[idx] = edu; else DB.edu.push(edu);
+    closeMo('moEdu'); renderEdu();
+  } catch(e) { alert('저장 실패: ' + e.message); }
 }
 
-// ════════════════════════════════════════
+async function delEdu(id) {
+  if (!confirm('이 교육 기록을 삭제하시겠습니까?')) return;
+  try {
+    await fbDel('educations', id);
+    DB.edu = DB.edu.filter(e => e.id !== id);
+    renderEdu();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
+}
+
+// ════════════════════════════════════════════════
 // 백업
-// ════════════════════════════════════════
-function dlBackup(){
-  const data={employees:DB.emp,annualLeaves:DB.leave,educations:DB.edu,exportedAt:new Date().toISOString()};
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-  a.download=`backup_${new Date().toISOString().slice(0,10)}.json`;
+// ════════════════════════════════════════════════
+function dlBackup() {
+  const data = { employees: DB.emp, annualLeaves: DB.leave, educations: DB.edu, exportedAt: new Date().toISOString() };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type:'application/json' }));
+  a.download = `backup_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
 }
-async function restoreBackup(event){
-  const file=event.target.files[0];if(!file)return;
-  if(!confirm('현재 데이터가 모두 교체됩니다. 계속하시겠습니까?'))return;
-  try{
-    const bd=JSON.parse(await file.text());
-    if(bd.employees){await fbReplaceAll('employees',bd.employees);DB.emp=bd.employees;}
-    if(bd.annualLeaves){await fbReplaceAll('annualLeaves',bd.annualLeaves);DB.leave=bd.annualLeaves;}
-    if(bd.educations){await fbReplaceAll('educations',bd.educations);DB.edu=bd.educations;}
-    refreshUI();alert('✅ 백업 복원이 완료되었습니다.');
-  }catch(e){alert('올바르지 않은 백업 파일입니다.');}
-  event.target.value='';
+
+async function restoreBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!confirm('현재 데이터가 모두 교체됩니다. 계속하시겠습니까?')) return;
+  try {
+    const bd = JSON.parse(await file.text());
+    if (bd.employees)    { await fbReplaceAll('employees',   bd.employees);    DB.emp   = bd.employees; }
+    if (bd.annualLeaves) { await fbReplaceAll('annualLeaves',bd.annualLeaves); DB.leave = bd.annualLeaves; }
+    if (bd.educations)   { await fbReplaceAll('educations',  bd.educations);   DB.edu   = bd.educations; }
+    refreshUI();
+    alert('✅ 백업 복원이 완료되었습니다.');
+  } catch(e) { alert('백업 파일 오류: ' + e.message); }
+  event.target.value = '';
 }
 
-// ════════════════════════════════════════
+// ════════════════════════════════════════════════
 // 관리자 패널
-// ════════════════════════════════════════
-async function renderAdmin(){
-  // 관리자 탭 클릭 시에만 최신 로드
-  if(document.getElementById('p-admin').classList.contains('on')){
-    DB.users=await fbGetAll('sysUsers');
+// ════════════════════════════════════════════════
+async function renderAdmin() {
+  // 관리자 탭에서만 최신 사용자 목록 로드
+  try {
+    DB.users = await fbGetAll('sysUsers');
+  } catch(e) {
+    console.warn('sysUsers 로드 실패', e);
   }
-  const pending=DB.users.filter(u=>u.status==='pending');
-  const pb=document.getElementById('pbadge');
-  if(pending.length){pb.textContent=pending.length;pb.style.display='';}else pb.style.display='none';
-  const pl=document.getElementById('pList');
-  if(!pending.length){
-    pl.innerHTML='<div class="empty"><div class="ico">✅</div><p>대기 중인 회원이 없습니다</p></div>';
-  }else{
-    pl.innerHTML=pending.map(u=>`<div class="pi">
-      <div><strong>${u.name}</strong><span style="color:var(--g500);margin-left:8px">(${u.id})</span><span style="font-size:12px;color:var(--g400);margin-left:8px">${new Date(u.createdAt).toLocaleDateString('ko-KR')} 신청</span></div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-s btn-sm" onclick="approveUser('${u.id}')">✅ 승인</button>
-        <button class="btn btn-d btn-sm" onclick="rejectUser('${u.id}')">❌ 거절</button>
-      </div>
-    </div>`).join('');
-  }
-  const all=DB.users.filter(u=>u.role!=='admin');
-  const ut=document.getElementById('uTb');
-  if(!all.length){
-    ut.innerHTML='<tr><td colspan="5"><div class="empty"><div class="ico">👥</div><p>등록된 회원이 없습니다</p></div></td></tr>';
-  }else{
-    ut.innerHTML=all.map(u=>`<tr>
-      <td><strong>${u.name}</strong></td><td>${u.id}</td>
-      <td>${u.status==='approved'?'<span class="badge b-gr">승인됨</span>':u.status==='pending'?'<span class="badge b-yw">대기중</span>':'<span class="badge b-rd">거절됨</span>'}</td>
-      <td>${new Date(u.createdAt).toLocaleDateString('ko-KR')}</td>
-      <td>
-        ${u.status!=='approved'?`<button class="btn btn-s btn-sm" onclick="approveUser('${u.id}')">승인</button>`:''}
-        <button class="btn btn-d btn-sm" style="margin-left:4px" onclick="delUser('${u.id}')">삭제</button>
-      </td>
-    </tr>`).join('');
-  }
-}
-async function approveUser(id){
-  const u=DB.users.find(u=>u.id===id);if(!u)return;
-  u.status='approved';await fbSet('sysUsers',id,u);
-  renderAdmin();alert(`✅ ${u.name}(${u.id}) 승인 완료`);
-}
-async function rejectUser(id){
-  const u=DB.users.find(u=>u.id===id);
-  if(!u||!confirm(`${u.name}(${u.id}) 회원 가입을 거절하시겠습니까?`))return;
-  u.status='rejected';await fbSet('sysUsers',id,u);renderAdmin();
-}
-async function delUser(id){
-  if(!confirm('이 회원을 삭제하시겠습니까?'))return;
-  await fbDel('sysUsers',id);
-  DB.users=DB.users.filter(u=>u.id!==id);renderAdmin();
-}
-async function updateAdmin(){
-  const newId=document.getElementById('aNewId').value.trim();
-  const curPw=document.getElementById('aCurPw').value;
-  const newPw=document.getElementById('aNewPw').value;
-  const newPw2=document.getElementById('aNewPw2').value;
-  if(!curPw){alert('현재 비밀번호를 입력하세요.');return;}
-  if(curPw!==CU.pw){alert('현재 비밀번호가 일치하지 않습니다.');return;}
-  if(newPw&&newPw.length<6){alert('새 비밀번호는 6자 이상이어야 합니다.');return;}
-  if(newPw&&newPw!==newPw2){alert('새 비밀번호가 일치하지 않습니다.');return;}
-  const updated={...CU,pw:newPw||CU.pw};
-  if(newId)updated.id=newId;
-  await fbSet('sysUsers',updated.id,updated);
-  if(newId&&newId!==CU.id)await fbDel('sysUsers',CU.id);
-  CU=updated;sessionStorage.setItem('cu',JSON.stringify(CU));
-  alert('✅ 계정이 업데이트되었습니다.');
+
+  const pending = DB.users.filter(u => u.status === 'pending');
+
+  // 네비 뱃지
+  const pb = document.getElementById('pbadge');
+  if (pending.length) { pb.textContent = pending.length; pb.style.display = ''; }
+  else pb.style.display = 'none';
+
+  // 승인 대기
+  const pl = document.getElementById('pList');
+  pl.innerHTML = !pending.length
+    ? '<div class="empty"><div class="ico">✅</div><p>대기 중인 회원이 없습니다</p></div>'
+    : pending.map(u => `
+      <div class="pi">
+        <div>
+          <strong>${u.name}</strong>
+          <span style="color:var(--g500);margin-left:8px">(${u.id})</span>
+          <span style="font-size:12px;color:var(--g400);margin-left:8px">${new Date(u.createdAt).toLocaleDateString('ko-KR')} 신청</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bs bsm" onclick="approveUser('${u.id}')">✅ 승인</button>
+          <button class="btn bd bsm" onclick="rejectUser('${u.id}')">❌ 거절</button>
+        </div>
+      </div>`).join('');
+
+  // 전체 회원
+  const all = DB.users.filter(u => u.role !== 'admin');
+  const ut  = document.getElementById('uTb');
+  ut.innerHTML = !all.length
+    ? '<tr><td colspan="5"><div class="empty"><div class="ico">👥</div><p>등록된 회원이 없습니다</p></div></td></tr>'
+    : all.map(u => `<tr>
+        <td><strong>${u.name}</strong></td>
+        <td>${u.id}</td>
+        <td>${u.status==='approved'?'<span class="badge bgr">승인됨</span>':u.status==='pending'?'<span class="badge byw">대기중</span>':'<span class="badge brd">거절됨</span>'}</td>
+        <td>${new Date(u.createdAt).toLocaleDateString('ko-KR')}</td>
+        <td>
+          ${u.status!=='approved'?`<button class="btn bs bsm" onclick="approveUser('${u.id}')">승인</button>`:''}
+          <button class="btn bd bsm" style="margin-left:4px" onclick="delUser('${u.id}')">삭제</button>
+        </td>
+      </tr>`).join('');
 }
 
-// 시작
+async function approveUser(id) {
+  const u = DB.users.find(u => u.id === id);
+  if (!u) return;
+  u.status = 'approved';
+  try {
+    await fbSet('sysUsers', id, u);
+    renderAdmin();
+    alert(`✅ ${u.name}(${u.id}) 승인 완료`);
+  } catch(e) { alert('처리 실패: ' + e.message); }
+}
+
+async function rejectUser(id) {
+  const u = DB.users.find(u => u.id === id);
+  if (!u || !confirm(`${u.name}(${u.id}) 회원 가입을 거절하시겠습니까?`)) return;
+  u.status = 'rejected';
+  try {
+    await fbSet('sysUsers', id, u);
+    renderAdmin();
+  } catch(e) { alert('처리 실패: ' + e.message); }
+}
+
+async function delUser(id) {
+  if (!confirm('이 회원을 삭제하시겠습니까?')) return;
+  try {
+    await fbDel('sysUsers', id);
+    DB.users = DB.users.filter(u => u.id !== id);
+    renderAdmin();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
+}
+
+async function updateAdmin() {
+  const newId  = document.getElementById('aNewId').value.trim();
+  const curPw  = document.getElementById('aCurPw').value;
+  const newPw  = document.getElementById('aNewPw').value;
+  const newPw2 = document.getElementById('aNewPw2').value;
+
+  if (!curPw)                        { alert('현재 비밀번호를 입력하세요.'); return; }
+  if (curPw !== CU.pw)               { alert('현재 비밀번호가 일치하지 않습니다.'); return; }
+  if (newPw && newPw.length < 6)     { alert('새 비밀번호는 6자 이상이어야 합니다.'); return; }
+  if (newPw && newPw !== newPw2)     { alert('새 비밀번호가 일치하지 않습니다.'); return; }
+
+  const updated = { ...CU, pw: newPw || CU.pw };
+  if (newId) updated.id = newId;
+
+  try {
+    await fbSet('sysUsers', updated.id, updated);
+    if (newId && newId !== CU.id) await fbDel('sysUsers', CU.id);
+    CU = updated;
+    sessionStorage.setItem('cu', JSON.stringify(CU));
+    alert('✅ 계정이 업데이트되었습니다.');
+  } catch(e) { alert('업데이트 실패: ' + e.message); }
+}
+
+// ════════════════════════════════════════════════
+// 앱 시작
+// ════════════════════════════════════════════════
 init();
 </script>
 </body>
